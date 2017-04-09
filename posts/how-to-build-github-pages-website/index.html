@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo,Node.js,GitHub,Mac," />
+  <meta name="keywords" content="Hexo,Node.js,GitHub,Mac,Git,npm," />
 
 
 
@@ -87,20 +87,21 @@
 
 
 
-<meta name="description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再在出國的這近一年內，也與許多不管是大陸、菲律賓、越南、新加坡人，私下相處基本上都與台灣人無誤，但工作上而工作內容主要都是在做 .NET 的開">
-<meta name="keywords" content="Hexo,Node.js,GitHub,Mac">
+<meta name="description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再發布文章，我可能要先花上一些時間，才能將原本的記憶找回來，所以毅然決然的建立另外的部落格，恰巧看到網路上有站主推薦 GitHub Pages">
+<meta name="keywords" content="Hexo,Node.js,GitHub,Mac,Git,npm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="建置 GitHub Pages 網站">
+<meta property="og:title" content="建置 GitHub Pages 網站 ( Hexo )">
 <meta property="og:url" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/index.html">
 <meta property="og:site_name" content="程式設計筆記">
-<meta property="og:description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再在出國的這近一年內，也與許多不管是大陸、菲律賓、越南、新加坡人，私下相處基本上都與台灣人無誤，但工作上而工作內容主要都是在做 .NET 的開">
+<meta property="og:description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再發布文章，我可能要先花上一些時間，才能將原本的記憶找回來，所以毅然決然的建立另外的部落格，恰巧看到網路上有站主推薦 GitHub Pages">
 <meta property="og:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/new-github-repository.png">
 <meta property="og:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/port-listen-EADDRINUSE.png">
 <meta property="og:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/hexo-init-website.png">
-<meta property="og:updated_time" content="2017-04-09T07:49:04.000Z">
+<meta property="og:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/github-login.png">
+<meta property="og:updated_time" content="2017-04-09T08:16:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="建置 GitHub Pages 網站">
-<meta name="twitter:description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再在出國的這近一年內，也與許多不管是大陸、菲律賓、越南、新加坡人，私下相處基本上都與台灣人無誤，但工作上而工作內容主要都是在做 .NET 的開">
+<meta name="twitter:title" content="建置 GitHub Pages 網站 ( Hexo )">
+<meta name="twitter:description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再發布文章，我可能要先花上一些時間，才能將原本的記憶找回來，所以毅然決然的建立另外的部落格，恰巧看到網路上有站主推薦 GitHub Pages">
 <meta name="twitter:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/new-github-repository.png">
 
 
@@ -135,7 +136,7 @@
 
 
 
-  <title> 建置 GitHub Pages 網站 | 程式設計筆記 </title>
+  <title> 建置 GitHub Pages 網站 ( Hexo ) | 程式設計筆記 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
@@ -285,7 +286,7 @@
             
             
               
-                建置 GitHub Pages 網站
+                建置 GitHub Pages 網站 ( Hexo )
               
             
           </h1>
@@ -369,7 +370,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>已經兩年多沒有在<a href="http://readily-notes.blogspot.com/" target="_blank" rel="external">原部落格</a>上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再<br>在出國的這近一年內，也與許多不管是大陸、菲律賓、越南、新加坡人，私下相處基本上都與台灣人無誤，但工作上<br>而工作內容主要都是在做 .NET 的開發，iOS Objective-C 為輔，<br><a id="more"></a></p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>已經兩年多沒有在<a href="http://readily-notes.blogspot.com/" target="_blank" rel="external">原部落格</a>上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再發布文章，我可能要先花上一些時間，才能將原本的記憶找回來，所以毅然決然的建立另外的部落格，恰巧看到網路上有站主推薦 GitHub Pages，且編寫文章已不再使用 HTML + CSS，而是使用<font color="blue">Markdown</font>的標記語言，大大減輕站長對於網頁語法的依賴，並且在切換主題時，也不需過度擔新版面配置與原文章 HTML 之衝突。所以建置此站，並且將接下來我所學到的、所遇到的問題，都記錄上來。<br><a id="more"></a></p>
 <h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><p>由於我的筆電是 MacBook Pro，所以此篇教學是基於在 Mac 環境下執行，相較於此，Windows 環境的網路資源就更多了，所以我就不多做介紹。</p>
 
 <ol>
@@ -404,15 +405,17 @@
 <blockquote>
 <p>如要換預設端口 (port) 則可以在 Terminal 打上以下指令，便可以進行更換<br>$ hexo config server.port 5000<br>如遇到端口被佔用以至於無法將網站啟動起來，先查看佔用此端口之應用程式<br>$ lsof -i tcp:4000<br>會得到以下結果  <img src="/uploads/how-to-build-github-pages-website/port-listen-EADDRINUSE.png"><br>視佔用此 port 之 PID，使用以下指令移除佔用<br>$ kill -9 29732</p>
 </blockquote>
- <img src="/uploads/how-to-build-github-pages-website/hexo-init-website.png">
+<p><img src="/uploads/how-to-build-github-pages-website/hexo-init-website.png"></p>
+
 <blockquote>
 <p>_config.yml 更多的詳細說明請參考 <a href="https://hexo.io/zh-tw/docs/configuration.html" target="_blank" rel="external">配置</a> 說明。</p>
 </blockquote>
 </li>
-</ol>
-<p>在此需要與</p>
-<ol>
-<li>部署到 GitHib </li>
+<li><p>部署到 GitHib<br>如視測試網站無誤，即可使用以下指令，部署到 GitHub Pages 上</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo d</div></pre></td></tr></table></figure>
+<p>當然，免不了的會詢問帳號密碼，就將 GitHub 上註冊的帳號密碼打上，完成部署</p>
+<p><img src="/uploads/how-to-build-github-pages-website/github-login.png"></p></li>
+<li>開啟 <a href="https://{username}.github.io/" target="_blank" rel="external">https://{username}.github.io/</a><br>部署完成後，開啟剛開始在 GitHub 註冊的 Repository 網址，就可以看到結果了。</li>
 </ol>
 <h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://www.jianshu.com/p/20ea93641bda" target="_blank" rel="external">Mac上安装Node和NPM</a><br><a href="https://git-scm.com/book/zh-tw/v2/%E9%96%8B%E5%A7%8B-Git-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8" target="_blank" rel="external">開始-Git-安裝教學</a></p>
 
@@ -451,6 +454,10 @@
             <a href="/tags/GitHub/" rel="tag"># GitHub</a>
           
             <a href="/tags/Mac/" rel="tag"># Mac</a>
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/tags/npm/" rel="tag"># npm</a>
           
         </div>
       
@@ -556,7 +563,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">標籤</span>
               </a>
             </div>
@@ -737,7 +744,7 @@
         var disqus_config = function () {
           this.page.url = 'http://boxmagic.github.io/posts/how-to-build-github-pages-website/';
           this.page.identifier = 'posts/how-to-build-github-pages-website/';
-          this.page.title = '建置 GitHub Pages 網站';
+          this.page.title = '建置 GitHub Pages 網站 ( Hexo )';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://boxmagic.disqus.com/embed.js';
