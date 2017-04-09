@@ -94,15 +94,15 @@
 <meta property="og:url" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/index.html">
 <meta property="og:site_name" content="程式設計筆記">
 <meta property="og:description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再發布文章，我可能要先花上一些時間，才能將原本的記憶找回來，所以毅然決然的建立另外的部落格，恰巧看到網路上有站主推薦 GitHub Pages">
-<meta property="og:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/new-github-repository.png">
-<meta property="og:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/port-listen-EADDRINUSE.png">
-<meta property="og:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/hexo-init-website.png">
-<meta property="og:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/github-login.png">
-<meta property="og:updated_time" content="2017-04-09T08:16:13.000Z">
+<meta property="og:image" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/new-github-repository.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/port-listen-EADDRINUSE.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/hexo-init-website.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/github-login.png">
+<meta property="og:updated_time" content="2017-04-09T08:43:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="建置 GitHub Pages 網站 ( Hexo )">
 <meta name="twitter:description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再發布文章，我可能要先花上一些時間，才能將原本的記憶找回來，所以毅然決然的建立另外的部落格，恰巧看到網路上有站主推薦 GitHub Pages">
-<meta name="twitter:image" content="http://boxmagic.github.io/uploads/how-to-build-github-pages-website/new-github-repository.png">
+<meta name="twitter:image" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/new-github-repository.png">
 
 
 
@@ -377,7 +377,10 @@
 <li><p>安裝 brew<br> 打開 Terminal，輸入以下指令</p>
  <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
 <p> brew 安裝完後，用以下指令檢查是否安裝完成，若完成安裝，則會顯示版本號碼</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">    $ brew -v</div><div class="line">    Homebrew 1.1.11 </div><div class="line">    Homebrew/homebrew-core (git revision 1320; last commit 2017-03-25)</div><div class="line">    ``` </div><div class="line">2. [安裝 Node.js &amp; npm][mac-install-nodejs-and-npm]</div><div class="line">    Node.js 安裝完後，用以下指令檢查是否安裝完成</div><div class="line">    ``` bash</div><div class="line">    $ node -v </div><div class="line">    v7.7.3</div></pre></td></tr></table></figure>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ brew -v</div><div class="line">Homebrew 1.1.11 </div><div class="line">Homebrew/homebrew-core (git revision 1320; last commit 2017-03-25)</div></pre></td></tr></table></figure>  
+</li>
+<li><p><a href="http://www.jianshu.com/p/20ea93641bda" target="_blank" rel="external">安裝 Node.js &amp; npm</a><br> Node.js 安裝完後，用以下指令檢查是否安裝完成</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node -v </div><div class="line">v7.7.3</div></pre></td></tr></table></figure>
 <p> npm 安裝完後，用以下指令檢查是否安裝完成</p>
  <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ npm -v</div><div class="line">4.1.2</div></pre></td></tr></table></figure>
 </li>
@@ -386,7 +389,7 @@
 </li>
 <li><p><a href="https://hexo.io/zh-tw/docs/" target="_blank" rel="external">安裝 Hexo</a><br> 打開 Terminal，輸入以下指令 ( -g 指令會被安裝在全域，所以不用管路徑 )</p>
  <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install -g hexo-cli </div></pre></td></tr></table></figure> </li>
-<li>註冊 GitHub 並建立 Repository<br> 註冊完成定登入後，到 <a href="https://github.com/new" target="_blank" rel="external">https://github.com/new</a> 位置建立 Repository <img src="/uploads/how-to-build-github-pages-website/new-github-repository.png">
+<li>註冊 GitHub 並建立 Repository<br> 註冊完成定登入後，到 <a href="https://github.com/new" target="_blank" rel="external">https://github.com/new</a> 位置建立 Repository <img src="/posts/how-to-build-github-pages-website/new-github-repository.png" alt="new-github-repository.png" title="">
  Repository 名稱為個人的帳戶名稱。</li>
 </ol>
 <blockquote>
@@ -403,9 +406,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo s --debug</div></pre></td></tr></table></figure>
 <p>預設端口 (port) 為 4000，所以在瀏覽器打上 <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 即可看到 Hexo 建置的網站</p>
 <blockquote>
-<p>如要換預設端口 (port) 則可以在 Terminal 打上以下指令，便可以進行更換<br>$ hexo config server.port 5000<br>如遇到端口被佔用以至於無法將網站啟動起來，先查看佔用此端口之應用程式<br>$ lsof -i tcp:4000<br>會得到以下結果  <img src="/uploads/how-to-build-github-pages-website/port-listen-EADDRINUSE.png"><br>視佔用此 port 之 PID，使用以下指令移除佔用<br>$ kill -9 29732</p>
+<p>如要換預設端口 (port) 則可以在 Terminal 打上以下指令，便可以進行更換<br>$ hexo config server.port 5000<br>如遇到端口被佔用以至於無法將網站啟動起來，先查看佔用此端口之應用程式<br>$ lsof -i tcp:4000<br>會得到以下結果  <img src="/posts/how-to-build-github-pages-website/port-listen-EADDRINUSE.png" alt="port-listen-EADDRINUSE.png" title=""><br>視佔用此 port 之 PID，使用以下指令移除佔用<br>$ kill -9 29732</p>
 </blockquote>
-<p><img src="/uploads/how-to-build-github-pages-website/hexo-init-website.png"></p>
+<p><img src="/posts/how-to-build-github-pages-website/hexo-init-website.png" alt="hexo-init-website.png" title=""></p>
 
 <blockquote>
 <p>_config.yml 更多的詳細說明請參考 <a href="https://hexo.io/zh-tw/docs/configuration.html" target="_blank" rel="external">配置</a> 說明。</p>
@@ -414,7 +417,7 @@
 <li><p>部署到 GitHib<br>如視測試網站無誤，即可使用以下指令，部署到 GitHub Pages 上</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo d</div></pre></td></tr></table></figure>
 <p>當然，免不了的會詢問帳號密碼，就將 GitHub 上註冊的帳號密碼打上，完成部署</p>
-<p><img src="/uploads/how-to-build-github-pages-website/github-login.png"></p></li>
+<p><img src="/posts/how-to-build-github-pages-website/github-login.png" alt="github-login.png" title=""></p></li>
 <li>開啟 <a href="https://{username}.github.io/" target="_blank" rel="external">https://{username}.github.io/</a><br>部署完成後，開啟剛開始在 GitHub 註冊的 Repository 網址，就可以看到結果了。</li>
 </ol>
 <h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://www.jianshu.com/p/20ea93641bda" target="_blank" rel="external">Mac上安装Node和NPM</a><br><a href="https://git-scm.com/book/zh-tw/v2/%E9%96%8B%E5%A7%8B-Git-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8" target="_blank" rel="external">開始-Git-安裝教學</a></p>
