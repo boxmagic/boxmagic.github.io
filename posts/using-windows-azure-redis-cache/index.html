@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="ASP.NET,C#,Windows Azure," />
 
 
 
@@ -87,12 +87,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="程式設計筆記">
-<meta property="og:url" content="http://boxmagic.github.io/index.html">
+<meta name="description" content="前言有些資料需要大量運算，但是變動機會極低的時候，常會把運算結果存起來，下次直接抓出結果即可。如果有使用Windows Azure，這邊提供一個快取方式。 實作參考：如何使用 Azure Redis 快取  首先建立Redis Cache Service 安裝StackExchange.Redis並加入參考  先來看一下Code：1234567891011121314151617181920212">
+<meta name="keywords" content="ASP.NET,C#,Windows Azure">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Windows Azure Redis 快取">
+<meta property="og:url" content="http://boxmagic.github.io/posts/using-windows-azure-redis-cache/index.html">
 <meta property="og:site_name" content="程式設計筆記">
+<meta property="og:description" content="前言有些資料需要大量運算，但是變動機會極低的時候，常會把運算結果存起來，下次直接抓出結果即可。如果有使用Windows Azure，這邊提供一個快取方式。 實作參考：如何使用 Azure Redis 快取  首先建立Redis Cache Service 安裝StackExchange.Redis並加入參考  先來看一下Code：1234567891011121314151617181920212">
+<meta property="og:updated_time" content="2017-04-10T11:13:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="程式設計筆記">
+<meta name="twitter:title" content="使用 Windows Azure Redis 快取">
+<meta name="twitter:description" content="前言有些資料需要大量運算，但是變動機會極低的時候，常會把運算結果存起來，下次直接抓出結果即可。如果有使用Windows Azure，這邊提供一個快取方式。 實作參考：如何使用 Azure Redis 快取  首先建立Redis Cache Service 安裝StackExchange.Redis並加入參考  先來看一下Code：1234567891011121314151617181920212">
 
 
 
@@ -120,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://boxmagic.github.io/"/>
+  <link rel="canonical" href="http://boxmagic.github.io/posts/using-windows-azure-redis-cache/"/>
 
 
 
 
 
-  <title> 程式設計筆記 </title>
+  <title> 使用 Windows Azure Redis 快取 | 程式設計筆記 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
@@ -151,9 +156,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -246,496 +249,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/vscode-icon-extension/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/vscode-icon-extension/" itemprop="url">
-                  VS Code 提升產能的擴充套件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-04-09T18:57:22+08:00">
-                2017-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VSCode/" itemprop="url" rel="index">
-                    <span itemprop="name">VSCode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/vscode-icon-extension/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/vscode-icon-extension/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前使用 VS Code 開發 Angular 2 時，當頁面越來越多，目錄越來越深，在尋找檔案或者是目錄時，變得不是很直觀，降低產能。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/posts/vscode-icon-extension/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/how-to-build-github-pages-website/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/how-to-build-github-pages-website/" itemprop="url">
-                  建置 GitHub Pages 網站 ( Hexo )
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-04-08T20:04:00+08:00">
-                2017-04-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Build/" itemprop="url" rel="index">
-                    <span itemprop="name">Build</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/how-to-build-github-pages-website/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/how-to-build-github-pages-website/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>已經兩年多沒有在<a href="http://readily-notes.blogspot.com/">原部落格</a>上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再發布文章，我可能要先花上一些時間，才能將原本的記憶找回來，所以毅然決然的建立另外的部落格，恰巧看到網路上有站主推薦 GitHub Pages，且編寫文章已不再使用 HTML + CSS，而是使用<font color="blue">Markdown</font>的標記語言，大大減輕站長對於網頁語法的依賴，並且在切換主題時，也不需過度擔新版面配置與原文章 HTML 之衝突。所以建置此站，並且將接下來我所學到的、所遇到的問題，都記錄上來。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/posts/how-to-build-github-pages-website/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/async-await-task-generate-thread/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/async-await-task-generate-thread/" itemprop="url">
-                  Async/Await、Task產生執行緒
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2015-05-07T17:16:13+08:00">
-                2015-05-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ASP-NET/" itemprop="url" rel="index">
-                    <span itemprop="name">ASP.NET</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ASP-NET/C/" itemprop="url" rel="index">
-                    <span itemprop="name">C#</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/async-await-task-generate-thread/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/async-await-task-generate-thread/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>之前一直認為，Async/Await跟Task一樣都會建出新的執行緒，這是錯誤的，Await是用主執行緒，遇到真正的Async方法(ex:HttpClient.GetAsync)或手動執行的Task.Run或Task.Factory.StartNew，這樣才會建立出新的執行緒 </p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//主執行緒ID</span></div><div class="line">Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">"Main:&#123;0&#125;"</span>, System.Threading.Thread.CurrentThread.ManagedThreadId));</div><div class="line"></div><div class="line"><span class="comment">//Task執行緒ID</span></div><div class="line">Task t = Task.Run(() =&amp;gt; &#123; Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">"Task:&#123;0&#125;"</span>, System.Threading.Thread.CurrentThread.ManagedThreadId)); &#125;);</div><div class="line"></div><div class="line"><span class="comment">//使用Await呼叫方法</span></div><div class="line"><span class="keyword">await</span> GetAwaitThreadId();</div><div class="line"></div><div class="line"><span class="comment">//等候Task完成</span></div><div class="line">t.Wait();</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">async</span> Task <span class="title">GetAwaitThreadId</span>(<span class="params"></span>)</div><div class="line"></span>&#123;</div><div class="line">    <span class="comment">//Await方法執行緒ID</span></div><div class="line">    Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">"Await:&#123;0&#125;"</span>, System.Threading.Thread.CurrentThread.ManagedThreadId));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><img src="/posts/async-await-task-generate-thread/async-await-task-result-1.jpg" alt="async-await-task-result-1.jpg" title=""></p><br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/posts/async-await-task-generate-thread/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
 
   
 
@@ -765,10 +281,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/posts/using-windows-azure-redis-cache/" itemprop="url">
-                  使用 Windows Azure Redis 快取
-                </a>
+                使用 Windows Azure Redis 快取
               
             
           </h1>
@@ -863,9 +376,7 @@
       
 
       
-        
-          
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有些資料需要大量運算，但是變動機會極低的時候，常會把運算結果存起來，下次直接抓出結果即可。<br>如果有使用Windows Azure，這邊提供一個快取方式。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有些資料需要大量運算，但是變動機會極低的時候，常會把運算結果存起來，下次直接抓出結果即可。<br>如果有使用Windows Azure，這邊提供一個快取方式。</p>
 <h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>參考：<a href="http://azure.microsoft.com/zh-tw/documentation/articles/cache-dotnet-how-to-use-azure-redis-cache/" target="_blank" rel="external">如何使用 Azure Redis 快取</a></p>
 <ol>
 <li>首先建立<a href="http://azure.microsoft.com/zh-tw/documentation/articles/cache-dotnet-how-to-use-azure-redis-cache/#create-cache" target="_blank" rel="external">Redis Cache Service</a></li>
@@ -875,42 +386,76 @@
 <p>在程式中，寫好建立連線的Method(Initialize)，建立共用序列化與反序列化Method，取得的部分，如果取不到資料，Redis Cache也是回傳null，Method只是添加一些判斷減少跟Service連線。<br>儲存的部分，建立2種較彈性的設定保留時間Method，一個是使用預先設定的預設快取保留時間，另一個是自行設定快取保留時間，完成了Redis Cache存取功能，接下來使用方式如下：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//建立連線</span></div><div class="line">Initialize();</div><div class="line"></div><div class="line"><span class="comment">//儲存資料(預設保留時間)</span></div><div class="line">SetCache(<span class="string">"key"</span>, objvalue, <span class="literal">true</span>);</div><div class="line"></div><div class="line"><span class="comment">//儲存資料(自訂保留時間)</span></div><div class="line">SetCache(<span class="string">"key"</span>, objvalue, iexpiry);</div><div class="line"></div><div class="line"><span class="comment">//取得資料(String)</span></div><div class="line">GetCache(<span class="string">"key"</span>);</div><div class="line"></div><div class="line"><span class="comment">//取得資料(指定Type)</span></div><div class="line">GetCache&lt;T&gt;(<span class="string">"key"</span>);</div></pre></td></tr></table></figure></p>
 <p>另外，在CacheRedisConnection.GetDatabase()，可以指定不同的DB(int)儲存資料(預設為0)，可以將資料區分讓開發者依不同情境區分資料存放位置。</p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/ASP-NET/" rel="tag"># ASP.NET</a>
+          
+            <a href="/tags/C/" rel="tag"># C#</a>
+          
+            <a href="/tags/Windows-Azure/" rel="tag"># Windows Azure</a>
+          
+        </div>
       
 
       
+        
+      
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/async-await-task-generate-thread/" rel="next" title="Async/Await、Task產生執行緒">
+                <i class="fa fa-chevron-left"></i> Async/Await、Task產生執行緒
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -918,6 +463,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -937,8 +493,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar/avatar.jpg"
@@ -1000,6 +565,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#實作"><span class="nav-number">2.</span> <span class="nav-text">實作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1114,6 +695,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
@@ -1131,6 +716,18 @@
       <script id="dsq-count-scr" src="https://boxmagic.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://boxmagic.github.io/posts/using-windows-azure-redis-cache/';
+          this.page.identifier = 'posts/using-windows-azure-redis-cache/';
+          this.page.title = '使用 Windows Azure Redis 快取';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://boxmagic.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
