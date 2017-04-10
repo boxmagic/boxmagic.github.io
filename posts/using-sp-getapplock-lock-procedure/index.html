@@ -1,0 +1,810 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="TSQL,SQL,Lock,Procedure,sp_getapplock,sp_releaseapplock," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言最近公司遇到了預存程序 ( Stored Procedure ) 併發的問題，導致於用戶在點擊領取優惠時，同時領取到兩筆以上的情況，在領取優惠時，是使用程式呼叫 Procedure，並且在 Procedure 內做必要的判斷 (例如：不能重複領取、領取資格與條件、領取限制…等等)，當然，先前處理併發問題是使用 object lock，讓 Procedure 一次同時只能有一隻在執行，如以下程式">
+<meta name="keywords" content="TSQL,SQL,Lock,Procedure,sp_getapplock,sp_releaseapplock">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction)">
+<meta property="og:url" content="http://boxmagic.github.io/posts/using-sp-getapplock-lock-procedure/index.html">
+<meta property="og:site_name" content="程式設計筆記">
+<meta property="og:description" content="前言最近公司遇到了預存程序 ( Stored Procedure ) 併發的問題，導致於用戶在點擊領取優惠時，同時領取到兩筆以上的情況，在領取優惠時，是使用程式呼叫 Procedure，並且在 Procedure 內做必要的判斷 (例如：不能重複領取、領取資格與條件、領取限制…等等)，當然，先前處理併發問題是使用 object lock，讓 Procedure 一次同時只能有一隻在執行，如以下程式">
+<meta property="og:image" content="http://boxmagic.github.io/posts/using-sp-getapplock-lock-procedure/SQL-A.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/using-sp-getapplock-lock-procedure/SQL-B.png">
+<meta property="og:updated_time" content="2017-04-10T17:25:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction)">
+<meta name="twitter:description" content="前言最近公司遇到了預存程序 ( Stored Procedure ) 併發的問題，導致於用戶在點擊領取優惠時，同時領取到兩筆以上的情況，在領取優惠時，是使用程式呼叫 Procedure，並且在 Procedure 內做必要的判斷 (例如：不能重複領取、領取資格與條件、領取限制…等等)，當然，先前處理併發問題是使用 object lock，讓 Procedure 一次同時只能有一隻在執行，如以下程式">
+<meta name="twitter:image" content="http://boxmagic.github.io/posts/using-sp-getapplock-lock-procedure/SQL-A.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boxmagic.github.io/posts/using-sp-getapplock-lock-procedure/"/>
+
+
+
+
+
+  <title> SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction) | 程式設計筆記 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程式設計筆記</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/using-sp-getapplock-lock-procedure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-04-10T23:11:44+08:00">
+                2017-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/using-sp-getapplock-lock-procedure/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/using-sp-getapplock-lock-procedure/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近公司遇到了預存程序 ( Stored Procedure ) 併發的問題，導致於用戶在點擊領取優惠時，同時領取到兩筆以上的情況，在領取優惠時，是使用程式呼叫 Procedure，並且在 Procedure 內做必要的判斷 (例如：不能重複領取、領取資格與條件、領取限制…等等)，當然，先前處理併發問題是使用 object lock，讓 Procedure 一次同時只能有一隻在執行，如以下程式做法：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> Object obj = <span class="keyword">new</span> Object();</div><div class="line"><span class="keyword">lock</span> (obj)</div><div class="line">&#123;</div><div class="line">    <span class="comment">// critical section</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>但是遇到伺服器 (Server) 有做負載平衡 (Load Balance) 的情況下，而 Procedure 執行時間又過長的情況下，很有可能發生此問題。<br><a id="more"></a></p>
+<h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>先拿官網上的範例做說明：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">BEGIN</span> <span class="keyword">TRANSACTION</span>;  </div><div class="line"><span class="keyword">DECLARE</span> @<span class="keyword">result</span> <span class="built_in">int</span>;  </div><div class="line">EXEC @result = sp_getapplock @Resource = 'Form1',   </div><div class="line">               @LockMode = 'Exclusive';  </div><div class="line">IF @result = -3  </div><div class="line"><span class="keyword">BEGIN</span>  </div><div class="line">    <span class="keyword">ROLLBACK</span> <span class="keyword">TRANSACTION</span>;  </div><div class="line"><span class="keyword">END</span>  </div><div class="line"><span class="keyword">ELSE</span>  </div><div class="line"><span class="keyword">BEGIN</span>  </div><div class="line">    EXEC @<span class="keyword">result</span> = sp_releaseapplock @<span class="keyword">Resource</span> = <span class="string">'Form1'</span>;  </div><div class="line">    <span class="keyword">COMMIT</span> <span class="keyword">TRANSACTION</span>;  </div><div class="line"><span class="keyword">END</span>;</div></pre></td></tr></table></figure></p>
+<p>sp_getapplock 為預存程序( Stored Procedure )，它有幾個參數：</p>
+<ol>
+<li>@Resource<br>字串，指定用來識別鎖定資源的名稱。此參數可以依照整個 Procedure 或者依照使用者識別值來做定義，記住，此資源名稱是整個 SQL 在使用，一旦不當使用或沒有正常釋放，會導致鎖死。</li>
+<li>@LockMode<br>取得的特定資源鎖定模式。模式有以下定義：Shared, Update, IntentShared, IntentExclusive, Exclusive。</li>
+<li>@LockOwner<br>鎖定的擁有者lock_owner要求鎖定時的值。 Transaction (預設) 或 Session，若為 Transaction，表示該交易 commit 或者 rollback，就會釋放此鎖；Session 則要明確呼叫 sp_releaseapplock 或是關閉連線才會釋放此鎖。</li>
+<li>@LockTimeout<br>鎖定逾時值 (以毫秒為單位)。此單位也代表它會等待前一個交易的時間，當前一交易時間超過此單位時間，回傳值會是 -1。</li>
+<li>@DbPrincipal<br>擁有資料庫中物件權限的使用者、角色或應用程式角色。函式的呼叫端必須是成員database_principal、 dbo 或 db_owner 固定資料庫角色，才能成功呼叫函數。 預設值是 public。</li>
+</ol>
+<p>而上述區段程式碼中，@result 為整數型態，它會有幾種狀態：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>同步授與鎖定成功。</td>
+</tr>
+<tr>
+<td>1</td>
+<td>在等待其他不相容的鎖定釋出之後，授與鎖定成功。</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>鎖定要求逾時。</td>
+</tr>
+<tr>
+<td>-2</td>
+<td>已取消鎖定要求。</td>
+</tr>
+<tr>
+<td>-3</td>
+<td>已將鎖定要求選為死結犧牲者。</td>
+</tr>
+<tr>
+<td>-999</td>
+<td>表示參數驗證或其他呼叫錯誤。</td>
+</tr>
+</tbody>
+</table>
+<p>基於上述的基本介紹，應該對 sp_getapplock 有基本的認識。</p>
+<p>回到主題，我利用 sp_getapplock 來解決我的問題，我撰寫了一隻 SQL，用了兩個 SQL Server Management Studio 同時執行此 SQL，先看程式碼：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DECLARE</span> @startTime DATETIME </div><div class="line"><span class="keyword">DECLARE</span> @execStartTime DATETIME </div><div class="line"><span class="keyword">DECLARE</span> @execEndTime DATETIME </div><div class="line"><span class="keyword">DECLARE</span> @lockReturnCode <span class="built_in">INT</span></div><div class="line"><span class="keyword">Begin</span> tran</div><div class="line"><span class="keyword">SELECT</span> @startTime = <span class="keyword">GETDATE</span>()</div><div class="line">Exec @lockReturnCode =</div><div class="line">    sp_getapplock @<span class="keyword">Resource</span>=<span class="string">'MyLock'</span>, @LockMode=<span class="string">'Exclusive'</span>,</div><div class="line">        @LockOwner=<span class="string">'Transaction'</span>, @LockTimeout = <span class="number">5000</span></div><div class="line"><span class="keyword">IF</span> @lockReturnCode &gt;= <span class="number">0</span></div><div class="line">    <span class="keyword">BEGIN</span></div><div class="line">        <span class="keyword">SELECT</span> @execStartTime = <span class="keyword">GETDATE</span>()</div><div class="line">        waitfor delay <span class="string">'00:00:10'</span>  </div><div class="line">        <span class="keyword">SELECT</span> @execEndTime = <span class="keyword">GETDATE</span>()</div><div class="line">        <span class="keyword">SELECT</span> <span class="string">'執行'</span> <span class="string">'執行狀態'</span></div><div class="line">        <span class="keyword">COMMIT</span> <span class="keyword">TRANSACTION</span></div><div class="line">    <span class="keyword">END</span></div><div class="line"><span class="keyword">ELSE</span></div><div class="line">    <span class="keyword">BEGIN</span></div><div class="line">        <span class="keyword">SELECT</span> <span class="string">'不執行'</span> <span class="string">'執行狀態'</span></div><div class="line">        <span class="keyword">ROLLBACK</span> <span class="keyword">TRANSACTION</span></div><div class="line">    <span class="keyword">END</span> </div><div class="line"><span class="keyword">SELECT</span> @@SPID <span class="string">'工作階段識別碼'</span>, @lockReturnCode <span class="string">'傳回碼值'</span>, @startTime <span class="string">'預存程序進入時間'</span>, </div><div class="line">        @execStartTime <span class="string">'執行前時間'</span>, @execEndTime <span class="string">'執行後時間'</span></div></pre></td></tr></table></figure>
+<p></p><p><img src="/posts/using-sp-getapplock-lock-procedure/SQL-A.png" width="500"></p><p></p>
+<center>程序一</center><br><img src="/posts/using-sp-getapplock-lock-procedure/SQL-B.png" width="500"><br><center>程序二</center>
+
+<ul>
+<li>程序一設定條件 LockTimeout 為 5 秒，執行時間為 10 秒，基本上會逾時。</li>
+<li>程序二設定條件 LockTimeout 為 5 秒，執行時間為 5 秒，基本上會逾時。</li>
+</ul>
+<p>當程序一在 18:01.550 進入後，執行時間 10 秒，而程序二在 18:01.887 進入後，在等待程序一將應用程式資源所釋放，但由於等待太久，所以當程序一執行並釋放鎖後，程序二已經超過逾時時間，所以不執行。</p>
+<p>以上只是非常粗淺的例子，拿上述的例子將參數做調適之後，會得到不同的結果，各位可以嘗試看看。</p>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="https://dotblogs.com.tw/rainmaker/2014/04/11/144702" target="_blank" rel="external">[SQL]使用sp_getapplock來確保某段SQL同時間只能有一個Session執行</a><br><a href="https://msdn.microsoft.com/zh-tw/library/ms189823.aspx" target="_blank" rel="external">sp_getapplock (Transact-SQL)</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/TSQL/" rel="tag"># TSQL</a>
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+            <a href="/tags/Lock/" rel="tag"># Lock</a>
+          
+            <a href="/tags/Procedure/" rel="tag"># Procedure</a>
+          
+            <a href="/tags/sp-getapplock/" rel="tag"># sp_getapplock</a>
+          
+            <a href="/tags/sp-releaseapplock/" rel="tag"># sp_releaseapplock</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/vscode-icon-extension/" rel="prev" title="VS Code 提升產能的擴充套件">
+                VS Code 提升產能的擴充套件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="David" />
+          <p class="site-author-name" itemprop="name">David</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#實作"><span class="nav-number">2.</span> <span class="nav-text">實作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">3.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://boxmagic.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://boxmagic.github.io/posts/using-sp-getapplock-lock-procedure/';
+          this.page.identifier = 'posts/using-sp-getapplock-lock-procedure/';
+          this.page.title = 'SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://boxmagic.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

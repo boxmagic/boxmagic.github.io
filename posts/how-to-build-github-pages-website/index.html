@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/port-listen-EADDRINUSE.png">
 <meta property="og:image" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/hexo-init-website.png">
 <meta property="og:image" content="http://boxmagic.github.io/posts/how-to-build-github-pages-website/github-login.png">
-<meta property="og:updated_time" content="2017-04-09T08:43:37.000Z">
+<meta property="og:updated_time" content="2017-04-10T16:05:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="建置 GitHub Pages 網站 ( Hexo )">
 <meta name="twitter:description" content="前言已經兩年多沒有在原部落格上發文，因為工作關係，工作量加大且沒有再多學到新的技術，所以就怠惰了。且近一年已到國外發展，包含大陸、菲律賓，也是因為環境與薪資的緣故，讓我不得不出國工作。另外一個原因就是我已經忘了大部分在 Blogger 自訂的 CSS，如果要再發布文章，我可能要先花上一些時間，才能將原本的記憶找回來，所以毅然決然的建立另外的部落格，恰巧看到網路上有站主推薦 GitHub Pages">
@@ -397,12 +397,15 @@
 </blockquote>
 <h1 id="建置"><a href="#建置" class="headerlink" title="建置"></a>建置</h1><ol>
 <li><p>建置 Hexo 環境，並設定好配置<br>在 Terminal 執行以下指令，Hexo 會在指定的資料夾建立必要檔案</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo init &lt;folder&gt;</div><div class="line">$ <span class="built_in">cd</span> &lt;folder&gt;</div><div class="line">$ npm install</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ hexo init &lt;folder&gt;</div><div class="line">$ <span class="built_in">cd</span> &lt;folder&gt;</div><div class="line">$ npm install</div><div class="line">$ npm install hexo --save</div></pre></td></tr></table></figure>
 <p>比較需要注意的是根目錄的 _config.yml，它是網站的配置檔，之後會對它有許多的操作與介紹。</p>
 
 <p>開啟 _config.yml，為了之後部署到 GitHub 上做設定</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># Deployment</div><div class="line">## Docs: https://hexo.io/docs/deployment.html</div><div class="line">deploy:</div><div class="line">    type: git</div><div class="line">    repository: https://github.com/&#123;username&#125;/&#123;username&#125;.github.io.git</div><div class="line">    branch: master</div></pre></td></tr></table></figure>
-<p>此時使用以下指令，可將網站在本地端建置起來，並且可以預覽網站，進行測試</p>
+<p>填寫完部署資訊之後，需要再安裝 hexo-deployer-git Git部署套件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
+<p>當然 Hexo 也有提供不只 Git 的部署套件，包含 Heroku、Rsync、OpenShift、FTPSync 等。</p>
+<p>此時使用以下指令，可將網站在本地端建置起來，並且可以預覽網站，進行測試。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo s --debug</div></pre></td></tr></table></figure>
 <p>預設端口 (port) 為 4000，所以在瀏覽器打上 <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 即可看到 Hexo 建置的網站</p>
 <blockquote>
@@ -564,7 +567,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -575,7 +578,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分類</span>
               </a>
             </div>
@@ -586,7 +589,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">標籤</span>
               </a>
             </div>
