@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Mac,VSCode,Extension," />
+  <meta name="keywords" content="Windows Azure,Storage," />
 
 
 
@@ -87,23 +87,20 @@
 
 
 
-<meta name="description" content="前言之前使用 VS Code 開發 Angular 2 時，當頁面越來越多，目錄越來越深，在尋找檔案或者是目錄時，變得不是很直觀，降低產能。">
-<meta name="keywords" content="Mac,VSCode,Extension">
+<meta name="description" content="使用 Microsoft Azure Storage 來擷取 Azure Table 的資料，通常要考慮速度與流量的最佳化，但原本的版本是 Microsoft Azure Storage 2.0.6，是沒有支援 OData 的，且 SDK 又是以 URL 去和 Azure Table 要資料，且一次都會要所有欄位資料，且速度也很慢，更別說還要做一些資料處理了。 我舉我的 Log 為例： Log 資">
+<meta name="keywords" content="Windows Azure,Storage">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VS Code 提升產能的擴充套件">
-<meta property="og:url" content="http://boxmagic.github.io/posts/vscode-icon-extension/index.html">
+<meta property="og:title" content="升級 Microsoft Azure Storage 4.3.0 以節省輸出流量、加快速度">
+<meta property="og:url" content="http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/index.html">
 <meta property="og:site_name" content="程式設計筆記">
-<meta property="og:description" content="前言之前使用 VS Code 開發 Angular 2 時，當頁面越來越多，目錄越來越深，在尋找檔案或者是目錄時，變得不是很直觀，降低產能。">
-<meta property="og:image" content="http://boxmagic.github.io/posts/vscode-icon-extension/vscode-explore.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/vscode-icon-extension/vscode-icon-extension.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/vscode-icon-extension/vscode-icon-option.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/vscode-icon-extension/vscode-icon-selection.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/vscode-icon-extension/vscode-icon-active-after.png">
-<meta property="og:updated_time" content="2017-04-09T12:56:20.000Z">
+<meta property="og:description" content="使用 Microsoft Azure Storage 來擷取 Azure Table 的資料，通常要考慮速度與流量的最佳化，但原本的版本是 Microsoft Azure Storage 2.0.6，是沒有支援 OData 的，且 SDK 又是以 URL 去和 Azure Table 要資料，且一次都會要所有欄位資料，且速度也很慢，更別說還要做一些資料處理了。 我舉我的 Log 為例： Log 資">
+<meta property="og:image" content="http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/fiddler-1.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/fiddler-2.png">
+<meta property="og:updated_time" content="2017-04-11T16:43:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="VS Code 提升產能的擴充套件">
-<meta name="twitter:description" content="前言之前使用 VS Code 開發 Angular 2 時，當頁面越來越多，目錄越來越深，在尋找檔案或者是目錄時，變得不是很直觀，降低產能。">
-<meta name="twitter:image" content="http://boxmagic.github.io/posts/vscode-icon-extension/vscode-explore.png">
+<meta name="twitter:title" content="升級 Microsoft Azure Storage 4.3.0 以節省輸出流量、加快速度">
+<meta name="twitter:description" content="使用 Microsoft Azure Storage 來擷取 Azure Table 的資料，通常要考慮速度與流量的最佳化，但原本的版本是 Microsoft Azure Storage 2.0.6，是沒有支援 OData 的，且 SDK 又是以 URL 去和 Azure Table 要資料，且一次都會要所有欄位資料，且速度也很慢，更別說還要做一些資料處理了。 我舉我的 Log 為例： Log 資">
+<meta name="twitter:image" content="http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/fiddler-1.png">
 
 
 
@@ -131,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://boxmagic.github.io/posts/vscode-icon-extension/"/>
+  <link rel="canonical" href="http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/"/>
 
 
 
 
 
-  <title> VS Code 提升產能的擴充套件 | 程式設計筆記 </title>
+  <title> 升級 Microsoft Azure Storage 4.3.0 以節省輸出流量、加快速度 | 程式設計筆記 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
@@ -266,7 +263,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/vscode-icon-extension/">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David">
@@ -287,7 +284,7 @@
             
             
               
-                VS Code 提升產能的擴充套件
+                升級 Microsoft Azure Storage 4.3.0 以節省輸出流量、加快速度
               
             
           </h1>
@@ -302,8 +299,8 @@
               
                 <span class="post-meta-item-text">發表於</span>
               
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-04-09T18:57:22+08:00">
-                2017-04-09
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2014-12-19T11:09:34+08:00">
+                2014-12-19
               </time>
             
 
@@ -325,8 +322,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VSCode/" itemprop="url" rel="index">
-                    <span itemprop="name">VSCode</span>
+                  <a href="/categories/Azure/" itemprop="url" rel="index">
+                    <span itemprop="name">Azure</span>
                   </a>
                 </span>
 
@@ -343,9 +340,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/vscode-icon-extension/#comments" itemprop="discussionUrl">
+                <a href="/posts/upgrade-microsoft-azure-storage-4-3-0/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/vscode-icon-extension/" itemprop="commentCount"></span>
+                        data-disqus-identifier="posts/upgrade-microsoft-azure-storage-4-3-0/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -371,24 +368,14 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前使用 VS Code 開發 Angular 2 時，當頁面越來越多，目錄越來越深，在尋找檔案或者是目錄時，變得不是很直觀，降低產能。<br><a id="more"></a><br><img src="/posts/vscode-icon-extension/vscode-explore.png" width="200"></p>
-<p>就上圖所示，檔案一多會變得不好辨認。<br>所以在檔案前面以圖示顯示，會比辨認副檔名還來得直觀，來得快。</p>
-<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><ol>
-<li><p>安裝 vscode-icon 套件<br>開啟 VS Code 左側有擴充功能圖示，點擊之後查詢「vscode-icon」，點擊安裝</p>
-<p><img src="/posts/vscode-icon-extension/vscode-icon-extension.png" width="200"></p>
-
-<p>完成安裝後，上方設定列點擊「Code」&gt; 「喜好設定」&gt;「檔案圖示佈景主題」</p>
-<p><img src="/posts/vscode-icon-extension/vscode-icon-option.png" width="200"></p>
-
-<p>此時在 Code 應用程式上會出現選項，選擇「VSCode Icons」</p>
-<p><img src="/posts/vscode-icon-extension/vscode-icon-selection.png" width="200"></p>
-
-<p>最後可以在左側目錄列看到每個檔案，包含資料夾都有圖示去辨別檔案的類型</p>
-<p><img src="/posts/vscode-icon-extension/vscode-icon-active-after.png" width="200"></p>
-
-</li>
-</ol>
-<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://developer.51cto.com/art/201606/512622.htm" target="_blank" rel="external">vscode-icons: 提高生产力的 Visual Studio Code插件</a><br><a href="http://jingyan.baidu.com/article/c275f6ba398e6be33d7567e0.html" target="_blank" rel="external">Visual Studio Code 怎么设置文件图标主题？</a></p>
+        <p>使用 Microsoft Azure Storage 來擷取 Azure Table 的資料，通常要考慮速度與流量的最佳化，但原本的版本是 Microsoft Azure Storage 2.0.6，是沒有支援 OData 的，且 SDK 又是以 URL 去和 Azure Table 要資料，且一次都會要所有欄位資料，且速度也很慢，更別說還要做一些資料處理了。</p>
+<p>我舉我的 Log 為例：</p>
+<p>Log 資料欄位約略有 10 欄。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">TableQuery&lt;Log&gt; query = (<span class="keyword">new</span> TableQuery&lt;Log&gt;());</div><div class="line"><span class="keyword">var</span> data = table.ExecuteQuery&lt;Log&gt;(query);</div><div class="line"></div><div class="line"><span class="keyword">var</span> _query = (</div><div class="line">    <span class="keyword">from</span> entity <span class="keyword">in</span> data</div><div class="line">    <span class="comment">// where entity.ErrorMessage != ""</span></div><div class="line">    <span class="keyword">where</span> entity.Timestamp &gt; DateTime.Now.AddDays(<span class="number">-1</span>)</div><div class="line"></div><div class="line">    <span class="comment">// where entity.Location.EndsWith("PUT")</span></div><div class="line">    <span class="keyword">orderby</span> entity.Timestamp <span class="keyword">descending</span></div><div class="line">    <span class="keyword">select</span> entity</div><div class="line">);</div><div class="line">DateTime std = DateTime.Now;</div><div class="line"></div><div class="line"><span class="keyword">var</span> r = _query.ToList();</div><div class="line"></div><div class="line">DateTime etd = DateTime.Now;</div><div class="line">TimeSpan diffDT = etd.Subtract(std);</div><div class="line">Console.WriteLine(<span class="string">"DateTime Method : &#123;0&#125; ms"</span>, diffDT.TotalMilliseconds);</div></pre></td></tr></table></figure></p>
+<p>資料有 370 筆，執行時間 25275.3736 ms，約 25 秒。</p>
+<p>使用 Fiddler 來看：<br><img src="/posts/upgrade-microsoft-azure-storage-4-3-0/fiddler-1.png" width="400"><br>由於 Azure Table 資料輸出有限制筆數，所以才會要那麼多次，每一份資料都 760000 bytes 左右，0.76 MB 左右。</p>
+<p>升級 Microsoft Azure Storage 4.3.0 後，將程式碼稍微改一下，抓出需要使用的欄位就好：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">TableQuery&lt;Log&gt; query = (<span class="keyword">new</span> TableQuery&lt;Log&gt;()).Select(<span class="keyword">new</span> <span class="keyword">string</span>[] &#123; <span class="string">"partitionKey"</span>, <span class="string">"Timestamp"</span> &#125;);</div></pre></td></tr></table></figure></p>
+<p>資料有 330 筆，執行時間 9779.4132 ms，約 9.7 秒。</p>
+<p>使用 Fiddler 來看：<br><img src="/posts/upgrade-microsoft-azure-storage-4-3-0/fiddler-2.png" width="400"><br>這樣一來，既省輸出流量，也縮短時間，所以還沒有升級不訪升級試看看。</p>
 
       
     </div>
@@ -418,11 +405,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Mac/" rel="tag"># Mac</a>
+            <a href="/tags/Windows-Azure/" rel="tag"># Windows Azure</a>
           
-            <a href="/tags/VSCode/" rel="tag"># VSCode</a>
-          
-            <a href="/tags/Extension/" rel="tag"># Extension</a>
+            <a href="/tags/Storage/" rel="tag"># Storage</a>
           
         </div>
       
@@ -435,8 +420,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/using-sp-getapplock-lock-procedure/" rel="next" title="SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction)">
-                <i class="fa fa-chevron-left"></i> SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction)
+              <a href="/posts/using-windows-azure-redis-cache/" rel="next" title="使用 Windows Azure Redis Cache">
+                <i class="fa fa-chevron-left"></i> 使用 Windows Azure Redis Cache
               </a>
             
           </div>
@@ -444,10 +429,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/how-to-build-github-pages-website/" rel="prev" title="建置 GitHub Pages 網站 ( Hexo )">
-                建置 GitHub Pages 網站 ( Hexo ) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -501,17 +482,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目錄
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            本站概覽
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar/avatar.jpg"
@@ -573,22 +545,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安裝"><span class="nav-number">2.</span> <span class="nav-text">安裝</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">3.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -727,9 +683,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://boxmagic.github.io/posts/vscode-icon-extension/';
-          this.page.identifier = 'posts/vscode-icon-extension/';
-          this.page.title = 'VS Code 提升產能的擴充套件';
+          this.page.url = 'http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/';
+          this.page.identifier = 'posts/upgrade-microsoft-azure-storage-4-3-0/';
+          this.page.title = '升級 Microsoft Azure Storage 4.3.0 以節省輸出流量、加快速度';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://boxmagic.disqus.com/embed.js';
