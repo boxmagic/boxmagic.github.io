@@ -2,16 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/</loc>
+    <loc>http://boxmagic.github.io/posts/build-google-cloud-platform-vm/</loc>
     
-    <lastmod>2017-04-11T16:43:30.000Z</lastmod>
+    <lastmod>2017-04-14T15:32:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/how-to-change-themes-in-hexo/</loc>
+    
+    <lastmod>2017-04-13T11:10:31.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://boxmagic.github.io/posts/how-to-transfer-from-rss-to-hexo/</loc>
     
-    <lastmod>2017-04-11T16:39:39.000Z</lastmod>
+    <lastmod>2017-04-12T13:52:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/</loc>
+    
+    <lastmod>2017-04-11T17:15:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/upgrade-microsoft-azure-storage-4-3-0/</loc>
+    
+    <lastmod>2017-04-11T16:47:54.000Z</lastmod>
     
   </url>
   

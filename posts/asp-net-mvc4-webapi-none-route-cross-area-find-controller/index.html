@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ASP.NET MVC,Visual Studio,Web API," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言目前專案設定權限是採用Area進行區分，基本規劃為角色 1..n Area 最近在強化權限控管，發現在Area找不到Controller的時候，竟然會去其他的Area找有沒有符合名稱的Controller ( 如何切換 Area 的 Web Api 路由 ) 對規劃的權限區分來說，這一個非常嚴重的問題">
+<meta name="keywords" content="ASP.NET MVC,Visual Studio,Web API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ASP .NET MVC4 WebApi - 不允許路由(Route)跨區域(Area)找Controller">
+<meta property="og:url" content="http://boxmagic.github.io/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/index.html">
+<meta property="og:site_name" content="程式設計筆記">
+<meta property="og:description" content="前言目前專案設定權限是採用Area進行區分，基本規劃為角色 1..n Area 最近在強化權限控管，發現在Area找不到Controller的時候，竟然會去其他的Area找有沒有符合名稱的Controller ( 如何切換 Area 的 Web Api 路由 ) 對規劃的權限區分來說，這一個非常嚴重的問題">
+<meta property="og:updated_time" content="2017-04-11T17:15:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ASP .NET MVC4 WebApi - 不允許路由(Route)跨區域(Area)找Controller">
+<meta name="twitter:description" content="前言目前專案設定權限是採用Area進行區分，基本規劃為角色 1..n Area 最近在強化權限控管，發現在Area找不到Controller的時候，竟然會去其他的Area找有沒有符合名稱的Controller ( 如何切換 Area 的 Web Api 路由 ) 對規劃的權限區分來說，這一個非常嚴重的問題">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boxmagic.github.io/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/"/>
+
+
+
+
+
+  <title> ASP .NET MVC4 WebApi - 不允許路由(Route)跨區域(Area)找Controller | 程式設計筆記 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程式設計筆記</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ASP .NET MVC4 WebApi - 不允許路由(Route)跨區域(Area)找Controller
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2014-08-08T13:10:28+08:00">
+                2014-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ASP-NET/" itemprop="url" rel="index">
+                    <span itemprop="name">ASP.NET</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前專案設定權限是採用Area進行區分，基本規劃為角色 1..n Area</p>
+<p>最近在強化權限控管，發現在Area找不到Controller的時候，竟然會去其他的Area找有沒有符合名稱的Controller <a href="http://readily-notes.blogspot.tw/2013/10/area-web-api-route.html" target="_blank" rel="external">( 如何切換 Area 的 Web Api 路由 )</a></p>
+<p>對規劃的權限區分來說，這一個非常嚴重的問題<br><a id="more"></a></p>
+<h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>舉個例子：<br>(角色=&gt;Area)<br><span style="color: blue;">人員管理者</span>=&gt;<span style="color: #6aa84f;">People</span><br><span style="color: blue;">薪資管理者</span>=&gt;<span style="color: #6aa84f;">Salary</span></p>
+<p>王小明有<span style="color: blue;">人員管理者</span>這個角色，所以他可以使用<span style="color: #6aa84f;">People</span>裡的所有Controller， 碰巧王小明知道了<span style="color: #6aa84f;">Salary</span>的某隻Api路徑可以取得全公司員工的薪資(api/<span style="color: red;">Salary</span>/AllPeople)， 就權限管理機制，王小明沒有<span style="color: #6aa84f;">Salary</span>的Area權限，所以被判定為無權限(401)。</p>
+<p>到這邊都很沒問題，一切都很美好…<strike>如果這樣就結束，還要這篇幹嘛</strike></p>
+<p>偏偏王小明很有求知的精神，想說只要是<span style="color: #6aa84f;">People</span>就會被放行，那如果把<span style="color: #6aa84f;">Salary</span>改成<span style="color: #6aa84f;">People</span>不知道可不可以？<br>於是原本的路徑(api/<span style="color: red;">Salary</span>/AllPeople)變成了(api/<span style="color: red;">People</span>/AllPeople)。</p>
+<p>這時候權限機制判斷王小明是<span style="color: blue;">人員管理者</span>，可以訪問<span style="color: #6aa84f;">People</span>的Area，所以放行讓他通過， 殊不知在<span style="color: #6aa84f;">People</span>下沒有AllPeople的Controller，但對權限機制來說並不重要，有沒有是ControllerSelector的問題。</p>
+<p>這時候<a href="http://readily-notes.blogspot.tw/2013/10/area-web-api-route.html" target="_blank" rel="external">AreaHttpControllerSelector</a>出馬了，經過一連串的檢查，發現<span style="color: #6aa84f;">People</span>下沒有AllPeople的Controller，沒辦法走下去，那就交給老爸(<a href="https://aspnetwebstack.codeplex.com/SourceControl/latest#src/System.Web.Http/Dispatcher/DefaultHttpControllerSelector.cs" target="_blank" rel="external">DefaultHttpControllerSelector</a>)去處理吧。</p>
+<p>而老爸是不管這些Area的，只要符合ControllerName就好，所以找到了<span style="color: red;">Salary</span>的AllPeople，然後就跟小弟(<a href="http://dotnetinside.com/in/type/System.Web.Http/ApiControllerActionSelector/5.1.0.0" target="_blank" rel="external">ApiControllerActionSelector</a>)說，從<span style="color: red;">Salary</span>的AllPeople找符合的Action來執行吧。</p>
+<p>接著就會發現王小明引發<strike>美麗</strike>錯誤的結果，他拿到不該拿的資料了…<strike>其實也還好</strike></p>
+<p>這樣是不行的，如果Route有接到area的話，就只能從指定的Area下找Controller，沒找到就丟錯誤出去，所以修改一下<a href="http://readily-notes.blogspot.tw/2013/10/area-web-api-route.html" target="_blank" rel="external">AreaHttpControllerSelector</a>：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">...略...</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> HttpControllerDescriptor <span class="title">GetApiController</span>(<span class="params">HttpRequestMessage request</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">var</span> controllerName = <span class="keyword">base</span>.GetControllerName(request);</div><div class="line">    <span class="keyword">var</span> areaName = GetAreaName(request);</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">string</span>.IsNullOrEmpty(areaName))</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> type = GetControllerTypeByArea(areaName, controllerName);</div><div class="line">    <span class="keyword">if</span> (type == <span class="literal">null</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//原本回傳null是為了向老爸求救，今天兒子要獨當一面了</span></div><div class="line">        <span class="comment">//return null;</span></div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> HttpResponseException(request.CreateErrorResponse(HttpStatusCode.NotFound,</div><div class="line">            <span class="keyword">string</span>.Format(<span class="string">"No route providing a controller name was found to match request URI \"&#123;0&#125;\""</span>, <span class="keyword">new</span> <span class="keyword">object</span>[] &#123; request.RequestUri &#125;)));</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HttpControllerDescriptor(_configuration, controllerName, type);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://readily-notes.blogspot.tw/2013/10/area-web-api-route.html" target="_blank" rel="external">如何切換 Area 的 Web Api 路由</a><br><a href="https://aspnetwebstack.codeplex.com/SourceControl/latest#src/System.Web.Http/Dispatcher/DefaultHttpControllerSelector.cs" target="_blank" rel="external">DefaultHttpControllerSelector.cs Source Code</a><br><a href="http://dotnetinside.com/in/type/System.Web.Http/ApiControllerActionSelector/5.1.0.0" target="_blank" rel="external">ApiControllerActionSelector.cs Source Code</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ASP-NET-MVC/" rel="tag"># ASP.NET MVC</a>
+          
+            <a href="/tags/Visual-Studio/" rel="tag"># Visual Studio</a>
+          
+            <a href="/tags/Web-API/" rel="tag"># Web API</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/upgrade-microsoft-azure-storage-4-3-0/" rel="next" title="升級 Microsoft Azure Storage 4.3.0 以節省輸出流量、加快速度">
+                <i class="fa fa-chevron-left"></i> 升級 Microsoft Azure Storage 4.3.0 以節省輸出流量、加快速度
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="David" />
+          <p class="site-author-name" itemprop="name">David</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#說明"><span class="nav-number">2.</span> <span class="nav-text">說明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">3.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://boxmagic.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://boxmagic.github.io/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/';
+          this.page.identifier = 'posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/';
+          this.page.title = 'ASP .NET MVC4 WebApi - 不允許路由(Route)跨區域(Area)找Controller';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://boxmagic.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
