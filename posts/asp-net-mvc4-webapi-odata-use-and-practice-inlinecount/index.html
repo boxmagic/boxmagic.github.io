@@ -1,0 +1,790 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ASP.NET,ASP.NET MVC WebAPI,C#," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言WebApi提供各種平台取得相關資料，為了滿足各種平台不同的需求(排序、分頁、查詢等等)，最直覺的方式就是指定參數給他們使用，再處理各個參數，但這樣就變成不夠彈性，不需要查詢也要傳參數的值，同時加重了前、後端開發人員的麻煩。">
+<meta name="keywords" content="ASP.NET,ASP.NET MVC WebAPI,C#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ASP .NET MVC4 WebApi -- OData 使用與實作 $inlinecount">
+<meta property="og:url" content="http://boxmagic.github.io/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/index.html">
+<meta property="og:site_name" content="程式設計筆記">
+<meta property="og:description" content="前言WebApi提供各種平台取得相關資料，為了滿足各種平台不同的需求(排序、分頁、查詢等等)，最直覺的方式就是指定參數給他們使用，再處理各個參數，但這樣就變成不夠彈性，不需要查詢也要傳參數的值，同時加重了前、後端開發人員的麻煩。">
+<meta property="og:updated_time" content="2017-04-16T15:38:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ASP .NET MVC4 WebApi -- OData 使用與實作 $inlinecount">
+<meta name="twitter:description" content="前言WebApi提供各種平台取得相關資料，為了滿足各種平台不同的需求(排序、分頁、查詢等等)，最直覺的方式就是指定參數給他們使用，再處理各個參數，但這樣就變成不夠彈性，不需要查詢也要傳參數的值，同時加重了前、後端開發人員的麻煩。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boxmagic.github.io/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/"/>
+
+
+
+
+
+  <title> ASP .NET MVC4 WebApi -- OData 使用與實作 $inlinecount | 程式設計筆記 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程式設計筆記</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ASP .NET MVC4 WebApi -- OData 使用與實作 $inlinecount
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2014-05-05T11:29:00+08:00">
+                2014-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C#</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>WebApi提供各種平台取得相關資料，為了滿足各種平台不同的需求(排序、分頁、查詢等等)，最直覺的方式就是指定參數給他們使用，再處理各個參數，但這樣就變成不夠彈性，不需要查詢也要傳參數的值，同時加重了前、後端開發人員的麻煩。<br><a id="more"></a><br>使用OData讓前端傳入參數，不需要寫死程式，隨心所欲的完成排序、分頁、查詢等功能。<br>先來看看OData常用參數：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$top</td>
+<td>傳回前幾筆資料</td>
+</tr>
+<tr>
+<td>$skip</td>
+<td>跳過幾筆資料</td>
+</tr>
+<tr>
+<td>$filter</td>
+<td>- 查詢(where) eq-等於、gt-大於、lt-小於、ne-不等於 <br> - 串連 and、or</td>
+</tr>
+<tr>
+<td>$orderby</td>
+<td>排序</td>
+</tr>
+<tr>
+<td>$inlinecount</td>
+<td>傳回資料、總筆數、下一頁Url <br> - allpages <br> - one(預設)</td>
+</tr>
+</tbody>
+</table>
+<p>使用方式跟一般傳參數一樣，例如:<font color="blue"><a href="http://{domain}/api/{controller}/{action}?$top=5&amp;$skip=10" target="_blank" rel="external">http://{domain}/api/{controller}/{action}?$top=5&amp;$skip=10</a></font><br><a href="http://msdn.microsoft.com/library/azure/gg312156.aspx" target="_blank" rel="external">(更多參數說明請參考官方網站)</a></p>
+<p>在API的部分，需要設定屬性[Queryable]，就可以使用OData。</p>
+<blockquote>
+<ol>
+<li>許多文章都說需要使用[Queryable]搭配回傳IQuerable、AsQueryable()，經過測試後，回傳IEnumerable也是可以正常使用的。</li>
+<li>如果不想開放所有參數、或有一些限制條件，後端人員可以在[Queryable]設定相關參數以達到目的</li>
+</ol>
+</blockquote>
+<p>這樣就可以依照各種情況由前端開發人員自行決定需要傳遞那些參數，而後端開發人員只需要專心的處理資料以確保資料正確性即可。</p>
+<p>在測試的時候發現$inlinecount一直沒辦法使用(<font color="red">微軟好像不支援一些參數</font>)，這樣前端在做分頁時就不知道資料總筆數，所以我們動手實作一個屬性吧</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">InlineCountQueryableAttribute</span> : <span class="title">QueryableAttribute</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> MethodInfo _createPageResult =</div><div class="line">        <span class="keyword">typeof</span>(InlineCountQueryableAttribute)</div><div class="line">        .GetMethods(BindingFlags.Static | BindingFlags.NonPublic)</div><div class="line">        .Single(m =&gt; m.Name == <span class="string">"CreatePageResult"</span>);</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnActionExecuted</span>(<span class="params">HttpActionExecutedContext actionExecutedContext</span>)</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">base</span>.OnActionExecuted(actionExecutedContext);</div><div class="line">        HttpRequestMessage request = actionExecutedContext.Request;</div><div class="line">        HttpResponseMessage response = actionExecutedContext.Response;</div><div class="line">        IQueryable result;</div><div class="line">        <span class="keyword">if</span> (response.IsSuccessStatusCode</div><div class="line">            &amp;amp;&amp;amp; response.TryGetContentValue&lt;IQueryable&gt;(<span class="keyword">out</span> result))</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">long</span>? inlineCount = request.GetInlineCount();</div><div class="line">            <span class="keyword">if</span> (inlineCount != <span class="literal">null</span>)</div><div class="line">            &#123;</div><div class="line">                actionExecutedContext.Response = _createPageResult.MakeGenericMethod(result.ElementType).Invoke(</div><div class="line">                    <span class="literal">null</span>, <span class="keyword">new</span> <span class="keyword">object</span>[] &#123; request, request.GetInlineCount(), request.GetNextPageLink(), result &#125;) <span class="keyword">as</span> HttpResponseMessage;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">internal</span> <span class="keyword">static</span> HttpResponseMessage CreatePageResult&lt;T&gt;(HttpRequestMessage request, <span class="keyword">long</span>? count, Uri nextpageLink, IEnumerable&lt;T&gt; results)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> request.CreateResponse(HttpStatusCode.OK, <span class="keyword">new</span> PageResult&lt;T&gt;(results, nextpageLink, count));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>設定屬性由 [Queryable] 改為 [InlineCountQueryable] 即可正常使用$inlinecount參數 </p>
+<p><strong>2014/07/22 KaiYai補充：</strong><br>最近無意間發現了Bug，當程式碼出現錯誤產生Exception，Action回前端時依然會進到Attribute內執行OnActionExecuted事件，因為是Exception，所以傳進來的 HttpActionExecutedContext.Response 會是 null，而 HttpActionExecutedContext.Exception 會是錯誤資訊，如果利用原本程式碼收到的錯誤訊息不會是原本實際發生錯誤的部分，而是會出現OnActionExecuted內的錯誤：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">Error</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">Message</span>&gt;</span>發生錯誤。<span class="tag">&lt;/<span class="name">Message</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ExceptionMessage</span>&gt;</span>並未將物件參考設定為物件的執行個體。<span class="tag">&lt;/<span class="name">ExceptionMessage</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ExceptionType</span>&gt;</span>System.NullReferenceException<span class="tag">&lt;/<span class="name">ExceptionType</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">StackTrace</span>&gt;</span></div><div class="line">        ...略...</div><div class="line">    <span class="tag">&lt;/<span class="name">StackTrace</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">Error</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>但實際上的錯誤應該是<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">Error</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">Message</span>&gt;</span>發生錯誤。<span class="tag">&lt;/<span class="name">Message</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ExceptionMessage</span>&gt;</span>輸入字串格式不正確。<span class="tag">&lt;/<span class="name">ExceptionMessage</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ExceptionType</span>&gt;</span>System.FormatException<span class="tag">&lt;/<span class="name">ExceptionType</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">StackTrace</span>&gt;</span></div><div class="line">        ...略...</div><div class="line">    <span class="tag">&lt;/<span class="name">StackTrace</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">Error</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>這是因為 response 已經收到 null 值，指令沒有判斷到是否為 null，就會發生會設定物件的錯誤。<br>所以修正條件式加上判斷 response != null<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (response != <span class="literal">null</span> &amp;&amp; response.IsSuccessStatusCode &amp;amp;&amp;amp; response.TryGetContentValue&lt;IQueryable&gt;(<span class="keyword">out</span> result))</div></pre></td></tr></table></figure></p>
+<p>原本想要直接判斷 HttpActionExecutedContext.Exception != null，但想了想，為什麼執行 base.OnActionExecuted(actionExecutedContext); 沒有發生錯誤呢？所以決定看一下 <a href="https://searchcode.com/codesearch/view/27742382/" target="_blank" rel="external">QueryableAttribute</a>的Code，看到下的條件以後，毅然決然的直接照辦，<strike>有錯微軟會先被罵</strike>：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnActionExecuted</span>(<span class="params">HttpActionExecutedContext actionExecutedContext</span>)</span></div><div class="line">&#123;</div><div class="line">    ...略...</div><div class="line">    HttpResponseMessage response = actionExecutedContext.Response;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (response != <span class="literal">null</span> &amp;&amp; response.IsSuccessStatusCode) </div><div class="line">    ...略...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://msdn.microsoft.com/zh-tw/library/system.web.http.odata(v=vs.111" target="_blank" rel="external">System.Web.Http.OData 命名空間</a>.aspx)<br><a href="http://www.odata.org/" target="_blank" rel="external">OData官網</a><br><a href="http://blog.darkthread.net/post-2012-10-23-iqueryable-experiment.aspx" target="_blank" rel="external">關於IQueryable<t>特性的小實驗</t></a><br><a href="http://stackoverflow.com/questions/15790695/web-api-odata-inlinecount-and-testing" target="_blank" rel="external">Web API, OData, $inlinecount and testing</a><br><a href="https://searchcode.com/codesearch/view/27742382/" target="_blank" rel="external">QueryableAttribute Source(aspnetwebstack /src/System.Web.Http.OData/QueryableAttribute.cs)</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ASP-NET/" rel="tag"># ASP.NET</a>
+          
+            <a href="/tags/ASP-NET-MVC-WebAPI/" rel="tag"># ASP.NET MVC WebAPI</a>
+          
+            <a href="/tags/C/" rel="tag"># C#</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount-1/" rel="next" title="ASP .NET MVC4 WebApi -- OData 使用與實作 $inlinecount(續) -- C# Model 接取 $inlinecount 資料">
+                <i class="fa fa-chevron-left"></i> ASP .NET MVC4 WebApi -- OData 使用與實作 $inlinecount(續) -- C# Model 接取 $inlinecount 資料
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="David" />
+          <p class="site-author-name" itemprop="name">David</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">2.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://boxmagic.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://boxmagic.github.io/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/';
+          this.page.identifier = 'posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/';
+          this.page.title = 'ASP .NET MVC4 WebApi -- OData 使用與實作 $inlinecount';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://boxmagic.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
