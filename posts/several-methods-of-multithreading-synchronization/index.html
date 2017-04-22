@@ -1,0 +1,818 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C#,Thread,Lock,InterLocked,Monitor,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言上次分享過在預存程序 ( Stored Procedure ) 併發問題，利用 MSSQL 內的，現在碰到程式內需要處理使用者在申請出款時，可能因為驗證時間過於複雜，導致於寫入出入款表時，平白無故多出一筆金額相同的出款記錄，但申請時間卻相差六秒，所以我利用互斥鎖 ( Monitor ) 來解決這個問題，不過在解決這個問題，意外認識到許多同步鎖，以下就來一一介紹。">
+<meta name="keywords" content="C#,Thread,Lock,InterLocked,Monitor,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C# 實作多執行緒的同步方法">
+<meta property="og:url" content="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/index.html">
+<meta property="og:site_name" content="程式設計筆記">
+<meta property="og:description" content="前言上次分享過在預存程序 ( Stored Procedure ) 併發問題，利用 MSSQL 內的，現在碰到程式內需要處理使用者在申請出款時，可能因為驗證時間過於複雜，導致於寫入出入款表時，平白無故多出一筆金額相同的出款記錄，但申請時間卻相差六秒，所以我利用互斥鎖 ( Monitor ) 來解決這個問題，不過在解決這個問題，意外認識到許多同步鎖，以下就來一一介紹。">
+<meta property="og:image" content="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/InterLocked-Run.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/Monitor-Run.png">
+<meta property="og:updated_time" content="2017-04-22T14:38:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C# 實作多執行緒的同步方法">
+<meta name="twitter:description" content="前言上次分享過在預存程序 ( Stored Procedure ) 併發問題，利用 MSSQL 內的，現在碰到程式內需要處理使用者在申請出款時，可能因為驗證時間過於複雜，導致於寫入出入款表時，平白無故多出一筆金額相同的出款記錄，但申請時間卻相差六秒，所以我利用互斥鎖 ( Monitor ) 來解決這個問題，不過在解決這個問題，意外認識到許多同步鎖，以下就來一一介紹。">
+<meta name="twitter:image" content="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/InterLocked-Run.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/"/>
+
+
+
+
+
+  <title> C# 實作多執行緒的同步方法 | 程式設計筆記 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程式設計筆記</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                C# 實作多執行緒的同步方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-04-20T21:59:13+08:00">
+                2017-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C#</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/several-methods-of-multithreading-synchronization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/several-methods-of-multithreading-synchronization/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上次分享過在預存程序 ( Stored Procedure ) 併發問題，利用 MSSQL 內的，現在碰到程式內需要處理使用者在申請出款時，可能因為驗證時間過於複雜，導致於寫入出入款表時，平白無故多出一筆金額相同的出款記錄，但申請時間卻相差六秒，所以我利用互斥鎖 ( Monitor ) 來解決這個問題，不過在解決這個問題，意外認識到許多同步鎖，以下就來一一介紹。</p>
+<a id="more"></a>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><ol>
+<li><p>計數鎖 ( InterLocked )<br>計數鎖對於整數進行遞增或遞減，是一個靜態類別，除了 Increment、Decrement 遞增或遞減兩種方法外，還有 Exchange 和 CompareExchange 用於實現交換和比較交換。請看以下例子：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">int</span> counter = <span class="number">1</span>;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></div><div class="line">&#123;</div><div class="line">	Thread t1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> ThreadStart(Increment));</div><div class="line">	Thread t2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> ThreadStart(Decrement));</div><div class="line"></div><div class="line">	t1.Start();</div><div class="line">	t2.Start();</div><div class="line"></div><div class="line">	<span class="comment">// 主線程停止，先執行執行緒</span></div><div class="line">	t1.Join();</div><div class="line">	t2.Join();</div><div class="line"></div><div class="line">	System.Console.ReadKey();</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Increment</span>(<span class="params"></span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</div><div class="line">	&#123;</div><div class="line">		Interlocked.Increment(<span class="keyword">ref</span> counter);</div><div class="line">		System.Console.WriteLine(<span class="string">"Counter++ &#123;0&#125;"</span>, counter);</div><div class="line">		Thread.Sleep(<span class="number">10</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Decrement</span>(<span class="params"></span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</div><div class="line">	&#123;</div><div class="line">		Interlocked.Decrement(<span class="keyword">ref</span> counter);</div><div class="line">		System.Console.WriteLine(<span class="string">"Counter-- &#123;0&#125;"</span>, counter);</div><div class="line">		Thread.Sleep(<span class="number">10</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>執行結果如下：</p>
+<img src="/posts/several-methods-of-multithreading-synchronization/InterLocked-Run.png" width="300">
+<blockquote>
+<p>為什麼不使用 ++ 或 –，因為多線程操作必須是原子的，++ 和 – 並不具備此功能。</p>
+</blockquote>
+</li>
+<li><p>鎖 (lock)<br>lock 是其中最簡單也是最常用的一種鎖，當程序內發生併發問題，如果不分使用者進行管控，那 lock 絕對是最佳首選。請看以下程式碼：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">static</span> <span class="keyword">object</span> obj = <span class="keyword">new</span> <span class="keyword">object</span>();</div><div class="line"><span class="keyword">lock</span> (obj)</div><div class="line">&#123;</div><div class="line">    <span class="comment">// 程式開始執行</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>程序是共用且每次只一個執行緒執行，鎖定物件最好是 private，以便讓程序正常運行。</p>
+</blockquote>
+</li>
+<li><p>互斥鎖 (Monitor)<br>lock 的底層本身是 Monitor 來實現的，所以 Monitor 可以實現 lock 的所有功能，用起來也和 lock 很像，它是一個靜態類別，所以我用它來解決每個使用者在出款時，每次只執行一次出款。請參考以下範例程式碼：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</div><div class="line">	&#123;</div><div class="line">		Thread t1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> ParameterizedThreadStart(DoSomething));</div><div class="line">		t1.Start(<span class="string">"A"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</div><div class="line">	&#123;</div><div class="line">		Thread t1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> ParameterizedThreadStart(DoSomething));</div><div class="line">		t1.Start(<span class="string">"B"</span>);</div><div class="line">	&#125;</div><div class="line">	System.Console.ReadKey();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">DoSomething</span>(<span class="params"><span class="keyword">object</span> oUserName</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">string</span> userName = Convert.ToString(oUserName);</div><div class="line">	Thread t = Thread.CurrentThread;</div><div class="line">	<span class="keyword">int</span> processUseSecond = <span class="number">2</span>;</div><div class="line"></div><div class="line">	Console.WriteLine(<span class="string">"鎖 &#123;0&#125;[&#123;1&#125;] 鎖定"</span>, userName, t.ManagedThreadId);</div><div class="line">	Monitor.Enter(userName);</div><div class="line"></div><div class="line">	<span class="keyword">try</span> &#123; </div><div class="line">		Console.WriteLine(<span class="string">"用戶 &#123;0&#125;[&#123;1&#125;] 開始驗證"</span>, userName, t.ManagedThreadId);</div><div class="line">		Thread.Sleep(processUseSecond * <span class="number">1000</span> / <span class="number">2</span>); <span class="comment">// 等待 1 秒</span></div><div class="line">		Console.WriteLine(<span class="string">"用戶 &#123;0&#125;[&#123;1&#125;] 驗證完成"</span>, userName, t.ManagedThreadId);</div><div class="line"></div><div class="line">		Console.WriteLine(<span class="string">"用戶 &#123;0&#125;[&#123;1&#125;] 開始執行執行"</span>, userName, t.ManagedThreadId);</div><div class="line">		Thread.Sleep(processUseSecond * <span class="number">1000</span>); <span class="comment">// 等待 2 秒 </span></div><div class="line">		Console.WriteLine(<span class="string">"用戶 &#123;0&#125;[&#123;1&#125;] 執行完成"</span>, userName, t.ManagedThreadId);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">catch</span> (Exception ex)</div><div class="line">	&#123;</div><div class="line">		Console.WriteLine(<span class="string">"用戶 &#123;0&#125;[&#123;1&#125;] 執行失敗"</span>, userName, t.ManagedThreadId);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">finally</span></div><div class="line">	&#123;</div><div class="line">		Monitor.Exit(userName);</div><div class="line">		Console.WriteLine(<span class="string">"鎖 &#123;0&#125;[&#123;1&#125;] 釋放"</span>, userName, t.ManagedThreadId);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>執行結果如下：</p>
+<img src="/posts/several-methods-of-multithreading-synchronization/Monitor-Run.png" width="250">
+<p>Ａ 用戶和 B 用戶分屬不同個體，當一次大量出款請求送出 A 用戶等 A 用戶前筆資料處理完才能執行下個請求，而 B 用戶也是同樣狀況，兩者不互相衝突，也就能解決我在此篇文章開頭所述之併發之問題。<br>所以依照上張圖來看，A 一次進入鎖定狀態，全部都卡在 Monitor.Enter(userName) 中，只有一隻執行緒能夠執行，B 也是相同狀況。</p>
+</li>
+<li><p>讀寫鎖（ReadWriteLock)<br>讀寫鎖用於讀資源操作多於寫的狀況。若每次只有一條執行緒進行訪問權限顯然效能是不足的，讀寫鎖的優點是同時可以有多个執行緒對同一資源進行讀操作。使用必須要先宣告讀寫鎖：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> ReaderWriterLock _rwlock = <span class="keyword">new</span> ReaderWriterLock();</div></pre></td></tr></table></figure>
+<p>以下就引用 <a href="http://www.pclic.com/cjiaocheng/93512.html" target="_blank" rel="external">C#实现多线程的同步方法实例分析</a> 內所述<br>讀寫鎖是通過調用 AcquireReaderLock、ReleaseReaderLock、AcquireWriterLock、ReleaseWriterLock 來完成讀鎖和寫鎖控制的</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ReaderThread</span>(<span class="params"><span class="keyword">int</span> thrdId</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">try</span></div><div class="line">	&#123; </div><div class="line">		<span class="comment">// 请求读锁，如果100ms超时退出 </span></div><div class="line">		_rwlock.AcquireReaderLock(<span class="number">10</span>);</div><div class="line">		<span class="keyword">try</span></div><div class="line">		&#123;</div><div class="line">			<span class="keyword">int</span> inx = _rand.Next(_list.Count);</div><div class="line">			<span class="keyword">if</span> (inx &lt; _list.Count)</div><div class="line">				Console.WriteLine(<span class="string">"&#123;0&#125;thread &#123;1&#125;"</span>, thrdId, _list[inx]);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">finally</span></div><div class="line">		&#123;</div><div class="line">			_rwlock.ReleaseReaderLock();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">catch</span> (ApplicationException) <span class="comment">// 如果请求读锁失败 </span></div><div class="line">	&#123;</div><div class="line">		Console.WriteLine(<span class="string">"&#123;0&#125;thread get reader lock out time!"</span>, thrdId);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">WriterThread</span>(<span class="params"></span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">try</span></div><div class="line">	&#123;</div><div class="line">		<span class="comment">// 请求写锁 </span></div><div class="line">		_rwlock.AcquireWriterLock(<span class="number">100</span>);</div><div class="line">		<span class="keyword">try</span></div><div class="line">		&#123;</div><div class="line">			<span class="keyword">string</span> val = _rand.Next(<span class="number">200</span>).ToString();</div><div class="line">			_list.Add(val); <span class="comment">// 写入资源 </span></div><div class="line">			Console.WriteLine(<span class="string">"writer thread has written &#123;0&#125;"</span>, val);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">finally</span></div><div class="line">		&#123; <span class="comment">// 释放写锁 </span></div><div class="line">			_rwlock.ReleaseWriterLock();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">catch</span> (ApplicationException)</div><div class="line">	&#123;</div><div class="line">		Console.WriteLine(<span class="string">"Get writer thread lock out time!"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果你想在讀的時候插入寫操作請使用 UpgradeToWriterLock 和 DowngradeFromWriterLock 來進行操作，而不是釋放讀鎖。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">UpgradeAndDowngrade</span>(<span class="params"><span class="keyword">int</span> thrdId</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">try</span></div><div class="line">	&#123;</div><div class="line">		_rwlock.AcquireReaderLock(<span class="number">10</span>);</div><div class="line">		<span class="keyword">try</span></div><div class="line">		&#123;</div><div class="line">			<span class="keyword">try</span></div><div class="line">			&#123;</div><div class="line">				<span class="comment">// 提升读锁到写锁 </span></div><div class="line">				LockCookie lc = _rwlock.UpgradeToWriterLock(<span class="number">100</span>);</div><div class="line">				<span class="keyword">try</span></div><div class="line">				&#123;</div><div class="line">					<span class="keyword">string</span> val = _rand.Next(<span class="number">500</span>).ToString();</div><div class="line">					_list.Add(val); Console.WriteLine</div><div class="line">				  (<span class="string">"Upgrade Thread&#123;0&#125; add &#123;1&#125;"</span>, thrdId, val);</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">finally</span></div><div class="line">				&#123; <span class="comment">// 下降写锁 </span></div><div class="line">					_rwlock.DowngradeFromWriterLock(<span class="keyword">ref</span> lc);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">catch</span> (ApplicationException)</div><div class="line">			&#123;</div><div class="line">				Console.WriteLine(<span class="string">"&#123;0&#125;thread upgrade reader lock failed!"</span>, thrdId);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">finally</span></div><div class="line">		&#123;</div><div class="line">			<span class="comment">// 释放原来的读锁 </span></div><div class="line">			_rwlock.ReleaseReaderLock();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">catch</span> (ApplicationException)</div><div class="line">	&#123;</div><div class="line">		Console.WriteLine(<span class="string">"&#123;0&#125;thread get reader lock out time!"</span>, thrdId);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>這裡有一點要注意的就是讀鎖和寫鎖的超時等待時間間隔的設置。通常情况下設置寫鎖的等待超時要比讀鎖的長，否則会經常發生寫鎖等待失敗的情况。</p>
+</li>
+<li><p>互斥鎖（Mutex）<br>Mutex 本身可以實現 lock 和 Monitor 所有的操作，少從功能上講是這樣的。<br>使用方法很簡單：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// new a mutex with name</span></div><div class="line">Mutex m = <span class="keyword">new</span> Mutex(<span class="literal">false</span>, <span class="string">"m"</span>);</div><div class="line">m.WaitOne();</div></pre></td></tr></table></figure>
+<p>如果要釋放這個資源讓別人使用的時候</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">m.ReleaseMutex();</div></pre></td></tr></table></figure>
+<p>使用 mutex.WaitOne() 進入互斥區後，其他執行緒可以呼叫任意次數的 WaitOne()，但是離開互斥區之前，需要呼叫相對應的 ReleaseMuTex() 數量，不然其它執行只會留在互斥區繼續等待。</p>
+</li>
+<li><p>信号量 ( Semaphore )<br>信號量和互斥類似，只是信號量可以同時由多個線程使用，而互斥只能由一個線程使用。也就是說，使用信號量時，可以多個線程同時訪問受保護的資源。很適合用在類似於麥當勞櫃台處理點餐的流程。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 設定一次無差別執行三組執行緒</span></div><div class="line"><span class="keyword">static</span> Semaphore s = <span class="keyword">new</span> Semaphore(<span class="number">3</span>, <span class="number">3</span>); <span class="comment">// 值=3; 容量=3 </span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Go</span>(<span class="params"><span class="keyword">object</span> index</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">while</span> (<span class="literal">true</span>)</div><div class="line">	&#123;</div><div class="line">		s.WaitOne();</div><div class="line">		Console.WriteLine(Convert.ToInt32(index));</div><div class="line">		Thread.Sleep(<span class="number">1000</span>); </div><div class="line">		s.Release();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</div><div class="line">		<span class="keyword">new</span> Thread(<span class="keyword">new</span> ParameterizedThreadStart(Go)).Start(i);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>以上例子，可以讓同一時間只有三條執行緒在跑，其他都會在等待狀態，一但某一條執行緒釋放後，其中一條執行緒就會接著執行，直到這些工作被執行結束。</p>
+</li>
+<li><p>AutoResetEvent / ManualResetEvent<br> 在合適的情況下可以替代 timer，多執行緒互斥時使用 AutoResetEvent，可能會取得不錯的效果。<br>以下程式碼：</p>
+ <figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></div><div class="line">&#123;</div><div class="line">    Thread th = <span class="keyword">new</span> Thread(<span class="keyword">new</span> ThreadStart(MyMethod));</div><div class="line">    th.Start();</div><div class="line"></div><div class="line">    <span class="comment">//發送解鎖，讓執行緒中流程繼續執行</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</div><div class="line">    &#123;</div><div class="line">        Console.WriteLine(<span class="string">"主線執行緒.."</span>);</div><div class="line">        <span class="comment">// 發送解鎖，通知完成</span></div><div class="line">        autoReset.Set();    </div><div class="line">        Thread.Sleep(<span class="number">1000</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MyMethod</span>(<span class="params"></span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">// 等待</span></div><div class="line">        autoReset.WaitOne();    </div><div class="line">        Console.WriteLine(<span class="string">"WaitOne 等待完成了"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而 ManualResetEvent 與 AutoResetEvent 最大的差別就是，ManualResetEvent 在使用 WaitOne 鎖定後，必須還要呼叫 Reset 方法，才能回到未鎖定的狀態。</p>
+</li>
+</ol>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="/post/using-sp-getapplock-lock-procedure">SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction)</a><br><a href="http://www.pclic.com/cjiaocheng/93512.html" target="_blank" rel="external">C#实现多线程的同步方法实例分析</a></p>
+<ul>
+<li>Monitor<br><a href="https://dotblogs.com.tw/yc421206/2011/01/08/20668" target="_blank" rel="external">[C#.NET][Thread] 執行緒同步資源鎖定 - Monitor</a><br><a href="http://www.cnblogs.com/lxblog/archive/2013/03/07/2947182.html" target="_blank" rel="external">C# 线程同步技术（三）之 Monitor 和Lock</a><br><a href="http://tsaiyuchi.blogspot.com/2015/11/c-thread-monitor.html" target="_blank" rel="external">C# Thread Monitor 鎖定作業</a></li>
+<li>InterLocked<br><a href="http://www.cnblogs.com/free722/archive/2011/04/03/2004885.html" target="_blank" rel="external">C#多线程编程之：Interlocked类操作</a><br><a href="http://blog.csdn.net/kkfdsa132/article/details/5474013" target="_blank" rel="external">c#之线程同步浅析（1）—–轻量级同步Interlocked</a></li>
+<li>lock<br><a href="https://dotblogs.com.tw/yc421206/2011/01/07/20624" target="_blank" rel="external">[C#.NET][Thread] 執行緒同步資源鎖定 - lock / SyncLock</a></li>
+<li>ReadWriteLock<br><a href="https://dotblogs.com.tw/yc421206/archive/2011/01/14/20814.aspx" target="_blank" rel="external">[C#.NET][Thread] 執行緒單一寫入 / 多讀取資源鎖定 - ReaderWriterLock</a></li>
+<li>Mutex<br><a href="https://dotblogs.com.tw/yc421206/2011/01/09/20683" target="_blank" rel="external">[C#.NET][Thread] 執行緒同步資源鎖定 - Mutex</a><br><a href="https://math.pro/db/thread-132-1-1.html" target="_blank" rel="external">[C#] 使用多執行緒時， Mutex 的使用方法</a><br><a href="http://codingjames.blogspot.com/2009/10/cmutex.html" target="_blank" rel="external">在C#中使用Mutex</a></li>
+<li>Semaphore<br><a href="https://dotblogs.com.tw/yc421206/archive/2011/01/06/20619.aspx" target="_blank" rel="external">[C#.NET][Thread] 執行緒資源存取限制的同步機制 - Semaphore</a></li>
+<li>AutoResetEvent / ManualResetEvent<br><a href="https://dotblogs.com.tw/yc421206/2011/01/05/20609" target="_blank" rel="external">[C#.NET][Thread] 執行緒同步機制 - AutoResetEvent / ManualResetEvent</a></li>
+<li>Thread Pool<br><a href="http://blog.csdn.net/razorluo/article/details/8441360" target="_blank" rel="external">C#多线程实现方法——线程池(Thread Pool)</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C#</a>
+          
+            <a href="/tags/Thread/" rel="tag"># Thread</a>
+          
+            <a href="/tags/Lock/" rel="tag"># Lock</a>
+          
+            <a href="/tags/InterLocked/" rel="tag"># InterLocked</a>
+          
+            <a href="/tags/Monitor/" rel="tag"># Monitor</a>
+          
+            <a href="/tags/ReadWriteLock/" rel="tag"># ReadWriteLock</a>
+          
+            <a href="/tags/Mutex/" rel="tag"># Mutex</a>
+          
+            <a href="/tags/Semaphore/" rel="tag"># Semaphore</a>
+          
+            <a href="/tags/ManualResetEvent/" rel="tag"># ManualResetEvent</a>
+          
+            <a href="/tags/AutoResetEvent/" rel="tag"># AutoResetEvent</a>
+          
+            <a href="/tags/Thread-Pooling/" rel="tag"># Thread Pooling</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/iis-handle-extensionlessurlhandler-integrated-4-0-has-a-bad-module/" rel="prev" title="IIS 遇到 「HANDLER "EXTENSIONLESSURLHANDLER-INTEGRATED-4.0" HAS A BAD MODULE "MANAGEDPIPELINEHANDLER" IN ITS MODULE LIST」 問題解決方式">
+                IIS 遇到 「HANDLER "EXTENSIONLESSURLHANDLER-INTEGRATED-4.0" HAS A BAD MODULE "MANAGEDPIPELINEHANDLER" IN ITS MODULE LIST」 問題解決方式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="David" />
+          <p class="site-author-name" itemprop="name">David</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">3.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://boxmagic.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/';
+          this.page.identifier = 'posts/several-methods-of-multithreading-synchronization/';
+          this.page.title = 'C# 實作多執行緒的同步方法';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://boxmagic.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
