@@ -1,0 +1,1068 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SQL,Date," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="table:nth-of-type(1) th:nth-of-type(1) {     width:40%; } table:nth-of-type(1) th:nth-of-type(2) {     width:30%; } table:nth-of-type(1) th:nth-of-type(3) {     width:20%; } table:nth-of-type(1) th:n">
+<meta name="keywords" content="SQL,Date">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL Server 日期格式轉換與常用">
+<meta property="og:url" content="http://boxmagic.github.io/posts/sql-server-date-convert/index.html">
+<meta property="og:site_name" content="程式設計筆記">
+<meta property="og:description" content="table:nth-of-type(1) th:nth-of-type(1) {     width:40%; } table:nth-of-type(1) th:nth-of-type(2) {     width:30%; } table:nth-of-type(1) th:nth-of-type(3) {     width:20%; } table:nth-of-type(1) th:n">
+<meta property="og:updated_time" content="2017-04-24T16:40:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL Server 日期格式轉換與常用">
+<meta name="twitter:description" content="table:nth-of-type(1) th:nth-of-type(1) {     width:40%; } table:nth-of-type(1) th:nth-of-type(2) {     width:30%; } table:nth-of-type(1) th:nth-of-type(3) {     width:20%; } table:nth-of-type(1) th:n">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boxmagic.github.io/posts/sql-server-date-convert/"/>
+
+
+
+
+
+  <title> SQL Server 日期格式轉換與常用 | 程式設計筆記 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程式設計筆記</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/sql-server-date-convert/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SQL Server 日期格式轉換與常用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-04-24T23:12:43+08:00">
+                2017-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/sql-server-date-convert/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/sql-server-date-convert/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <style>
+table:nth-of-type(1) th:nth-of-type(1) {
+    width:40%;
+}
+table:nth-of-type(1) th:nth-of-type(2) {
+    width:30%;
+}
+table:nth-of-type(1) th:nth-of-type(3) {
+    width:20%;
+}
+table:nth-of-type(1) th:nth-of-type(4) {
+    width:10%;
+}
+</style>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近使用到 SQL Server 中的日期格式轉換，與維護到的預存程序內所寫到指定日期判斷，所以稍微研究了一下，以下就一一介紹 SQL Server 內有關於日期的指令。</p>
+<h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><ul>
+<li>日期</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>SQL</th>
+<th>執行結果</th>
+<th>格式</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 0)</td>
+<td>04 24 2017  4:05PM</td>
+<td>mon dd yy hh:mmAM (or PM)</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT convert(datetime, GETDATE(), 1)</td>
+<td>04/24/17</td>
+<td>mm/dd/yy</td>
+<td>U.S.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 2)</td>
+<td>17.04.24</td>
+<td>yy.mm.dd</td>
+<td>ANSI</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 3)</td>
+<td>24/04/17</td>
+<td>dd/mm/yy</td>
+<td>UK/FR</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 4)</td>
+<td>24.04.17</td>
+<td>dd.mm.yy</td>
+<td>German</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 5)</td>
+<td>24-04-17</td>
+<td>dd-mm-yy</td>
+<td>Italian</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 6)</td>
+<td>24 04 17</td>
+<td>dd mon yy</td>
+<td>non-det.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 7)</td>
+<td>04 24, 17</td>
+<td>mon dd, yy</td>
+<td>non-det.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 8)</td>
+<td>16:09:22</td>
+<td>hh:mm:ss</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 9)</td>
+<td>04 24 2017  4:09:22:990PM</td>
+<td>mon dd yyyy hh:mi:ss:mmmAM (or PM)</td>
+<td>Default with msec</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 10)</td>
+<td>04-24-17</td>
+<td>mm-dd-yy</td>
+<td>U.S.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 11)</td>
+<td>17/04/24</td>
+<td>yy/mm/dd</td>
+<td>Japan</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 12)</td>
+<td>170424</td>
+<td>yymmdd</td>
+<td>ISO</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 13)</td>
+<td>24 04 2017 16:09:22:990</td>
+<td>dd mon yy hh:mm:ss:mmm</td>
+<td>EU dflt</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 14)</td>
+<td>16:09:22:990</td>
+<td>hh:mm:ss:mmm(24h)</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 20)</td>
+<td>2017-04-24 16:09:22</td>
+<td>yyyy-mm-dd hh:mm:ss(24h)</td>
+<td>ODBC can.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 21)</td>
+<td>2017-04-24 16:09:22.990</td>
+<td>yyyy-mm-dd hh:mm:ss.mmm</td>
+<td>ODBC</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 22)</td>
+<td>04/24/17  4:09:22 PM</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 23)</td>
+<td>2017-04-24</td>
+<td>yyyy-MM-dd</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 24)</td>
+<td>16:09:22</td>
+<td>hh:mm:ss</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 25)</td>
+<td>2017-04-24 16:09:22.990</td>
+<td>yyyy-mm-dd hh:mm:ss(24h)</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 100)</td>
+<td>04 24 2017  4:09PM</td>
+<td>mon dd yyyy hh:miAM (or PM)</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 101)</td>
+<td>04/24/2017</td>
+<td>mm/dd/yyyy</td>
+<td>U.S.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 102)</td>
+<td>2017.04.24</td>
+<td>yyyy.mm.dd</td>
+<td>ANSI</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 103)</td>
+<td>24/04/2017</td>
+<td>dd/mm/yyyy</td>
+<td>UK/FR</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 104)</td>
+<td>24.04.2017</td>
+<td>dd.mm.yyyy</td>
+<td>German</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 105)</td>
+<td>24-04-2017</td>
+<td>dd-mm-yyyy</td>
+<td>Italian</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 106)</td>
+<td>24 04 2017</td>
+<td>dd mon yyyy</td>
+<td>non-det.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 107)</td>
+<td>04 24, 2017</td>
+<td>mon dd, yyyy</td>
+<td>non-det.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 108)</td>
+<td>16:09:22</td>
+<td>hh:mm:ss</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 109)</td>
+<td>04 24 2017  4:09:22:990PM</td>
+<td>mon dd yyyy hh:mi:ss:mmmAM (or PM)</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 110)</td>
+<td>04-24-2017</td>
+<td>mm-dd-yyyy</td>
+<td>U.S.</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 111)</td>
+<td>2017/04/24</td>
+<td>yyyy/mm/dd</td>
+<td>Japan</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 112)</td>
+<td>20170424</td>
+<td>yyyymmdd</td>
+<td>ISO</td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 113)</td>
+<td>24 04 2017 16:09:22:990</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 114)</td>
+<td>16:09:22:990</td>
+<td>hh:mm:ss.mmm</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 120)</td>
+<td>2017-04-24 16:09:22</td>
+<td>yyyy-mm-dd hh:mi:ss(24h)</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 121)</td>
+<td>2017-04-24 16:09:22.990</td>
+<td>yyyy-mm-dd hh:mi:ss.mmm(24h)</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 126)</td>
+<td>2017-04-24T16:09:22.990</td>
+<td>yyyy-mm-ddThh:mi:ss.mmm</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 130)</td>
+<td>28 ??? 1438  4:09:22:990PM</td>
+<td>dd mon yyyy hh:mi:ss:mmmAM</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CONVERT(varchar(100), GETDATE(), 131)</td>
+<td>28/07/1438  4:09:22:990PM</td>
+<td>dd/mm/yyyy hh:mi:ss:mmmAM</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>取得今天日期<br><code>SELECT getdate()</code></li>
+<li>取得年<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">year</span>(<span class="keyword">getdate</span>())</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">datepart</span>(yyyy, <span class="keyword">getdate</span>()) </div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">datepart</span>(yy, <span class="keyword">getdate</span>())</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>取得月</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">month</span>(<span class="keyword">getdate</span>())</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">datepart</span>(mm, <span class="keyword">getdate</span>())</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">datepart</span>(m, <span class="keyword">getdate</span>())</div></pre></td></tr></table></figure>
+</li>
+<li><p>取得日</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">day</span>(<span class="keyword">getdate</span>())</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">datepart</span>(dd, <span class="keyword">getdate</span>())</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">datepart</span>(d, <span class="keyword">getdate</span>())</div></pre></td></tr></table></figure>
+</li>
+<li><p>取得季<br><code>SELECT datepart(qq, getdate())</code></p>
+</li>
+<li>取得指定日期部分的字串<br><code>SELECT DATENAME(month, GETDATE())</code> </li>
+<li>取得星期<br><code>SELECT datepart(dw, getdate())</code></li>
+<li>取得星期中文字<br><code>SELECT Right(datename(weekday,getdate()),1)</code></li>
+<li>檢查是否為合法日期格式 ( 1 為正確；0 為錯誤 )<br><code>SELECT ISDATE(&#39;2017-03-01&#39;), ISDATE(&#39;2017-02-33&#39;)</code></li>
+<li><p>日期加減</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEADD</span>(<span class="keyword">day</span>, <span class="number">-10</span>, <span class="string">'04/30/2008'</span>)</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEADD</span>(<span class="keyword">day</span>, <span class="number">10</span>, <span class="string">'04/30/2008'</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>計算兩時間差<br><code>SELECT DATEDIFF(day,GETDATE(),&#39;04/30/2008&#39;)</code></p>
+</li>
+<li>取得這個小時開始的時間<br><code>SELECT DATEADD(hh,DATEDIFF(hh,0,getdate()),0)</code></li>
+<li>取得下個小時開始的時間<br><code>SELECT DATEADD(hh,1,DATEADD(hh,DATEDIFF(hh,0,getdate()),0))</code></li>
+<li>取得今天開始的時間 ( 凌晨12點 )<br><code>SELECT DATEADD(dd,DATEDIFF(dd,0,getdate()),0)</code></li>
+<li><p>取得本週的星期日、星期一( 本週開始日為星期日 )</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEADD</span>(wk,<span class="keyword">DATEDIFF</span>(wk,<span class="number">0</span>,<span class="keyword">getdate</span>()),<span class="number">-1</span>)</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEADD</span>(wk,<span class="keyword">DATEDIFF</span>(wk,<span class="number">0</span>,<span class="keyword">getdate</span>()),<span class="number">0</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>取得上週五、上週六</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEADD</span>(wk,<span class="keyword">DATEDIFF</span>(wk,<span class="number">0</span>,<span class="keyword">getdate</span>()),<span class="number">-3</span>)</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEADD</span>(wk,<span class="keyword">DATEDIFF</span>(wk,<span class="number">0</span>,<span class="keyword">getdate</span>()),<span class="number">-2</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>取得本月的第一天<br><code>SELECT DATEADD(mm,DATEDIFF(mm,0,getdate()),0)</code></p>
+</li>
+<li>取得下個月的第一天<br><code>SELECT dateadd(mm,1,DATEADD(mm,DATEDIFF(mm,0,getdate()),0))</code></li>
+<li><p>取得本月的最後一天</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">dateadd</span>(dd,<span class="number">-1</span>,<span class="keyword">DATEADD</span>(mm,<span class="keyword">DATEDIFF</span>(m,<span class="number">0</span>,<span class="keyword">getdate</span>())+<span class="number">1</span>,<span class="number">0</span>))</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">dateadd</span>(ms,<span class="number">-3</span>,<span class="keyword">DATEADD</span>(mm,<span class="keyword">DATEDIFF</span>(m,<span class="number">0</span>,<span class="keyword">getdate</span>())+<span class="number">1</span>,<span class="number">0</span>))</div></pre></td></tr></table></figure>
+</li>
+<li><p>取得上個月的最後一天</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">dateadd</span>(dd,<span class="number">-1</span>,<span class="keyword">DATEADD</span>(mm,<span class="keyword">DATEDIFF</span>(mm,<span class="number">0</span>,<span class="keyword">getdate</span>()),<span class="number">0</span>))</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">dateadd</span>(ms,<span class="number">-3</span>,<span class="keyword">DATEADD</span>(mm,<span class="keyword">DATEDIFF</span>(mm,<span class="number">0</span>,<span class="keyword">getdate</span>()),<span class="number">0</span>))</div></pre></td></tr></table></figure>
+</li>
+<li><p>取得本月天數<br><code>SELECT Day(dateadd(dd,-1,DATEADD(mm, DATEDIFF(m,0,getdate())+1, 0)))</code></p>
+</li>
+<li>取得本季的第一天<br><code>SELECT DATEADD(qq,DATEDIFF(qq,0,getdate()),0)</code></li>
+<li>取得下一季的第一天<br><code>SELECT DATEADD(qq,DATEDIFF(qq,0,dateadd(mm,3,getdate())),0)</code></li>
+<li>取得本季天數<br><code>SELECT DATEDIFF(dd,DATEADD(qq,DATEDIFF(qq,0,getdate()),0),DATEADD(qq,DATEDIFF(qq,0,dateadd(mm,3,getdate())),0))</code></li>
+<li>取得今年的第一天<br><code>SELECT DATEADD(yy,DATEDIFF(yy,0,getdate()),0)</code></li>
+<li>取得明年的第一天<br><code>SELECT DATEADD(yy,1,DATEADD(yy,DATEDIFF(yy,0,getdate()),0))</code></li>
+<li>取得去年的最後一天<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">dateadd</span>(dd,<span class="number">-1</span>,<span class="keyword">DATEADD</span>(yy,<span class="keyword">DATEDIFF</span>(yy,<span class="number">0</span>,<span class="keyword">getdate</span>()),<span class="number">0</span>))</div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">dateadd</span>(ms,<span class="number">-2</span>,<span class="keyword">DATEADD</span>(yy,<span class="keyword">DATEDIFF</span>(yy,<span class="number">0</span>,<span class="keyword">getdate</span>()),<span class="number">0</span>))</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="https://dotblogs.com.tw/spark/2009/08/05/9868" target="_blank" rel="external">[SQL] Sql Server 中一個非常強大的日期格式化函數 Convert</a><br><a href="https://jerry2yang.wordpress.com/2012/07/04/sql-%E5%AD%97%E4%B8%B2%E6%A8%A3%E5%BC%8F%E8%BD%89%E6%8F%9B%E7%82%BA%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F/" target="_blank" rel="external">SQL 字串樣式轉換為日期格式 CAST 和 CONVERT</a><br><a href="http://miisoo.blogspot.com/2008/04/sql-server-select-isdate2004-03-01-1.html" target="_blank" rel="external">MS SQL日期處理方法-整理(Date and Time Functions Tips)</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+            <a href="/tags/Date/" rel="tag"># Date</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/how-to-reversal-bit-value-in-sql/" rel="prev" title="如何在 SQL 更新時反轉 bit 欄位值">
+                如何在 SQL 更新時反轉 bit 欄位值 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="David" />
+          <p class="site-author-name" itemprop="name">David</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#實作"><span class="nav-number">2.</span> <span class="nav-text">實作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">3.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://boxmagic.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://boxmagic.github.io/posts/sql-server-date-convert/';
+          this.page.identifier = 'posts/sql-server-date-convert/';
+          this.page.title = 'SQL Server 日期格式轉換與常用';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://boxmagic.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

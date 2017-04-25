@@ -2,16 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/</loc>
+    <loc>http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/</loc>
     
-    <lastmod>2017-04-22T14:38:50.000Z</lastmod>
+    <lastmod>2017-04-25T14:49:09.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/sql-server-date-convert/</loc>
+    
+    <lastmod>2017-04-24T16:40:50.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/how-to-reversal-bit-value-in-sql/</loc>
+    
+    <lastmod>2017-04-24T15:06:37.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/</loc>
+    
+    <lastmod>2017-04-24T14:20:23.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/</loc>
+    
+    <lastmod>2017-04-24T14:20:19.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://boxmagic.github.io/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller-2/</loc>
     
-    <lastmod>2017-04-17T12:53:33.000Z</lastmod>
+    <lastmod>2017-04-24T14:20:15.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount-1/</loc>
+    
+    <lastmod>2017-04-24T14:20:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/</loc>
+    
+    <lastmod>2017-04-23T13:12:55.000Z</lastmod>
     
   </url>
   
@@ -19,20 +61,6 @@
     <loc>http://boxmagic.github.io/posts/iis-handle-extensionlessurlhandler-integrated-4-0-has-a-bad-module/</loc>
     
     <lastmod>2017-04-17T12:51:57.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://boxmagic.github.io/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount-1/</loc>
-    
-    <lastmod>2017-04-16T17:40:38.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://boxmagic.github.io/posts/asp-net-mvc4-webapi-odata-use-and-practice-inlinecount/</loc>
-    
-    <lastmod>2017-04-16T15:38:23.000Z</lastmod>
     
   </url>
   
@@ -96,13 +124,6 @@
     <loc>http://boxmagic.github.io/posts/build-google-cloud-platform-vm/</loc>
     
     <lastmod>2017-04-15T17:25:10.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://boxmagic.github.io/posts/asp-net-mvc4-webapi-none-route-cross-area-find-controller/</loc>
-    
-    <lastmod>2017-04-11T17:15:13.000Z</lastmod>
     
   </url>
   

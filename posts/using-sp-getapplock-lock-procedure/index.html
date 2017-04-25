@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="SQL,TSQL,Lock,Procedure,sp_getapplock,sp_releaseapplock," />
+  <meta name="keywords" content="SQL,Lock,TSQL,Procedure,sp_getapplock,sp_releaseapplock," />
 
 
 
@@ -88,7 +88,7 @@
 
 
 <meta name="description" content="前言最近公司遇到了預存程序 ( Stored Procedure ) 併發的問題，導致於用戶在點擊領取優惠時，同時領取到兩筆以上的情況，在領取優惠時，是使用程式呼叫 Procedure，並且在 Procedure 內做必要的判斷 (例如：不能重複領取、領取資格與條件、領取限制…等等)，當然，先前處理併發問題是使用 object lock，讓 Procedure 一次同時只能有一隻在執行，如以下程式">
-<meta name="keywords" content="SQL,TSQL,Lock,Procedure,sp_getapplock,sp_releaseapplock">
+<meta name="keywords" content="SQL,Lock,TSQL,Procedure,sp_getapplock,sp_releaseapplock">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL sp_getapplock：使用應用程式資源鎖定，確保同時間內只有一個交易 (Transaction)">
 <meta property="og:url" content="http://boxmagic.github.io/posts/using-sp-getapplock-lock-procedure/index.html">
@@ -458,9 +458,9 @@
           
             <a href="/tags/SQL/" rel="tag"># SQL</a>
           
-            <a href="/tags/TSQL/" rel="tag"># TSQL</a>
-          
             <a href="/tags/Lock/" rel="tag"># Lock</a>
+          
+            <a href="/tags/TSQL/" rel="tag"># TSQL</a>
           
             <a href="/tags/Procedure/" rel="tag"># Procedure</a>
           
@@ -570,7 +570,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -581,7 +581,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">分類</span>
               </a>
             </div>
@@ -592,7 +592,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">標籤</span>
               </a>
             </div>

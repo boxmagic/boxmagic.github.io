@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C#,Thread,Lock,InterLocked,Monitor,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling," />
+  <meta name="keywords" content="C#,Thread,InterLocked,Monitor,Lock,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling," />
 
 
 
@@ -88,7 +88,7 @@
 
 
 <meta name="description" content="前言上次分享過在預存程序 ( Stored Procedure ) 併發問題，利用 MSSQL 內的，現在碰到程式內需要處理使用者在申請出款時，可能因為驗證時間過於複雜，導致於寫入出入款表時，平白無故多出一筆金額相同的出款記錄，但申請時間卻相差六秒，所以我利用互斥鎖 ( Monitor ) 來解決這個問題，不過在解決這個問題，意外認識到許多同步鎖，以下就來一一介紹。">
-<meta name="keywords" content="C#,Thread,Lock,InterLocked,Monitor,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling">
+<meta name="keywords" content="C#,Thread,InterLocked,Monitor,Lock,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C# 實作多執行緒的同步方法">
 <meta property="og:url" content="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/index.html">
@@ -96,7 +96,7 @@
 <meta property="og:description" content="前言上次分享過在預存程序 ( Stored Procedure ) 併發問題，利用 MSSQL 內的，現在碰到程式內需要處理使用者在申請出款時，可能因為驗證時間過於複雜，導致於寫入出入款表時，平白無故多出一筆金額相同的出款記錄，但申請時間卻相差六秒，所以我利用互斥鎖 ( Monitor ) 來解決這個問題，不過在解決這個問題，意外認識到許多同步鎖，以下就來一一介紹。">
 <meta property="og:image" content="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/InterLocked-Run.png">
 <meta property="og:image" content="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/Monitor-Run.png">
-<meta property="og:updated_time" content="2017-04-22T14:38:50.000Z">
+<meta property="og:updated_time" content="2017-04-23T13:12:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C# 實作多執行緒的同步方法">
 <meta name="twitter:description" content="前言上次分享過在預存程序 ( Stored Procedure ) 併發問題，利用 MSSQL 內的，現在碰到程式內需要處理使用者在申請出款時，可能因為驗證時間過於複雜，導致於寫入出入款表時，平白無故多出一筆金額相同的出款記錄，但申請時間卻相差六秒，所以我利用互斥鎖 ( Monitor ) 來解決這個問題，不過在解決這個問題，意外認識到許多同步鎖，以下就來一一介紹。">
@@ -406,7 +406,7 @@
 <p>使用 mutex.WaitOne() 進入互斥區後，其他執行緒可以呼叫任意次數的 WaitOne()，但是離開互斥區之前，需要呼叫相對應的 ReleaseMuTex() 數量，不然其它執行只會留在互斥區繼續等待。</p>
 </li>
 <li><p>信号量 ( Semaphore )<br>信號量和互斥類似，只是信號量可以同時由多個線程使用，而互斥只能由一個線程使用。也就是說，使用信號量時，可以多個線程同時訪問受保護的資源。很適合用在類似於麥當勞櫃台處理點餐的流程。</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 設定一次無差別執行三組執行緒</span></div><div class="line"><span class="keyword">static</span> Semaphore s = <span class="keyword">new</span> Semaphore(<span class="number">3</span>, <span class="number">3</span>); <span class="comment">// 值=3; 容量=3 </span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Go</span>(<span class="params"><span class="keyword">object</span> index</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">while</span> (<span class="literal">true</span>)</div><div class="line">	&#123;</div><div class="line">		s.WaitOne();</div><div class="line">		Console.WriteLine(Convert.ToInt32(index));</div><div class="line">		Thread.Sleep(<span class="number">1000</span>); </div><div class="line">		s.Release();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</div><div class="line">		<span class="keyword">new</span> Thread(<span class="keyword">new</span> ParameterizedThreadStart(Go)).Start(i);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 設定一次無差別執行三組執行緒</span></div><div class="line"><span class="keyword">static</span> Semaphore s = <span class="keyword">new</span> Semaphore(<span class="number">3</span>, <span class="number">3</span>); <span class="comment">// 值 = 3; 容量 = 3 </span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Go</span>(<span class="params"><span class="keyword">object</span> index</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">while</span> (<span class="literal">true</span>)</div><div class="line">	&#123;</div><div class="line">		s.WaitOne();</div><div class="line">		Console.WriteLine(Convert.ToInt32(index));</div><div class="line">		Thread.Sleep(<span class="number">1000</span>); </div><div class="line">		s.Release();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</div><div class="line">		<span class="keyword">new</span> Thread(<span class="keyword">new</span> ParameterizedThreadStart(Go)).Start(i);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
 <p>以上例子，可以讓同一時間只有三條執行緒在跑，其他都會在等待狀態，一但某一條執行緒釋放後，其中一條執行緒就會接著執行，直到這些工作被執行結束。</p>
 </li>
 <li><p>AutoResetEvent / ManualResetEvent<br> 在合適的情況下可以替代 timer，多執行緒互斥時使用 AutoResetEvent，可能會取得不錯的效果。<br>以下程式碼：</p>
@@ -458,11 +458,11 @@
           
             <a href="/tags/Thread/" rel="tag"># Thread</a>
           
-            <a href="/tags/Lock/" rel="tag"># Lock</a>
-          
             <a href="/tags/InterLocked/" rel="tag"># InterLocked</a>
           
             <a href="/tags/Monitor/" rel="tag"># Monitor</a>
+          
+            <a href="/tags/Lock/" rel="tag"># Lock</a>
           
             <a href="/tags/ReadWriteLock/" rel="tag"># ReadWriteLock</a>
           
@@ -486,6 +486,10 @@
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/asp-net-web-api-document-swagger-ui/" rel="next" title="使用 Swagger 產生 ASP.NET MVC WebAPI 說明文件">
+                <i class="fa fa-chevron-left"></i> 使用 Swagger 產生 ASP.NET MVC WebAPI 說明文件
+              </a>
             
           </div>
 
@@ -574,7 +578,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -585,7 +589,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">分類</span>
               </a>
             </div>
@@ -596,7 +600,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">標籤</span>
               </a>
             </div>
