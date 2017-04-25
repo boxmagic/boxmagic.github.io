@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="ASP.NET,ASP.NET MVC WebAPI,Web API,ASP.NET MVC," />
+  <meta name="keywords" content="ASP.NET,ASP.NET MVC WebAPI,ASP.NET MVC,Web API," />
 
 
 
@@ -87,13 +87,13 @@
 
 
 
-<meta name="description" content="前言專案開始進行後，通常會需要輔助型文件來與技術人員溝通，甚至互相調用，做 Web API 尤其需要，與 iOS 、Android 和前端溝通，此時 Web API 如果有文件，溝通起來就會相對方便，而且開發人員通常沒有甚至懶的寫，因為寫文檔其實很花時間，所以 Swagger 就變成一大利器，以下就來介紹 Swagger 如何安裝。 實作 從 Nuget 下載 Swashbuckle點開「管理 N">
-<meta name="keywords" content="ASP.NET,ASP.NET MVC WebAPI,Web API,ASP.NET MVC">
+<meta name="description" content="前言專案開始進行後，通常會需要輔助型文件來與技術人員溝通，甚至互相調用，做 Web API 尤其需要，與 iOS 、Android 和前端溝通，此時 Web API 如果有文件，溝通起來就會相對方便，而且開發人員通常沒有甚至懶的寫，因為寫文檔其實很花時間，所以 Swagger 就變成一大利器，以下就來介紹 Swagger 如何安裝。">
+<meta name="keywords" content="ASP.NET,ASP.NET MVC WebAPI,ASP.NET MVC,Web API">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 Swagger 產生 ASP.NET MVC WebAPI 說明文件">
 <meta property="og:url" content="http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/index.html">
 <meta property="og:site_name" content="程式設計筆記">
-<meta property="og:description" content="前言專案開始進行後，通常會需要輔助型文件來與技術人員溝通，甚至互相調用，做 Web API 尤其需要，與 iOS 、Android 和前端溝通，此時 Web API 如果有文件，溝通起來就會相對方便，而且開發人員通常沒有甚至懶的寫，因為寫文檔其實很花時間，所以 Swagger 就變成一大利器，以下就來介紹 Swagger 如何安裝。 實作 從 Nuget 下載 Swashbuckle點開「管理 N">
+<meta property="og:description" content="前言專案開始進行後，通常會需要輔助型文件來與技術人員溝通，甚至互相調用，做 Web API 尤其需要，與 iOS 、Android 和前端溝通，此時 Web API 如果有文件，溝通起來就會相對方便，而且開發人員通常沒有甚至懶的寫，因為寫文檔其實很花時間，所以 Swagger 就變成一大利器，以下就來介紹 Swagger 如何安裝。">
 <meta property="og:image" content="http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/swagger-nuget.png">
 <meta property="og:image" content="http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/swagger-install.png">
 <meta property="og:image" content="http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/swagger-install-detail.png">
@@ -105,10 +105,10 @@
 <meta property="og:image" content="http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/swagger-post-ui.png">
 <meta property="og:image" content="http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/swagger-put-ui.png">
 <meta property="og:image" content="http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/swagger-delete-ui.png">
-<meta property="og:updated_time" content="2017-04-25T14:49:09.000Z">
+<meta property="og:updated_time" content="2017-04-25T16:34:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 Swagger 產生 ASP.NET MVC WebAPI 說明文件">
-<meta name="twitter:description" content="前言專案開始進行後，通常會需要輔助型文件來與技術人員溝通，甚至互相調用，做 Web API 尤其需要，與 iOS 、Android 和前端溝通，此時 Web API 如果有文件，溝通起來就會相對方便，而且開發人員通常沒有甚至懶的寫，因為寫文檔其實很花時間，所以 Swagger 就變成一大利器，以下就來介紹 Swagger 如何安裝。 實作 從 Nuget 下載 Swashbuckle點開「管理 N">
+<meta name="twitter:description" content="前言專案開始進行後，通常會需要輔助型文件來與技術人員溝通，甚至互相調用，做 Web API 尤其需要，與 iOS 、Android 和前端溝通，此時 Web API 如果有文件，溝通起來就會相對方便，而且開發人員通常沒有甚至懶的寫，因為寫文檔其實很花時間，所以 Swagger 就變成一大利器，以下就來介紹 Swagger 如何安裝。">
 <meta name="twitter:image" content="http://boxmagic.github.io/posts/asp-net-web-api-document-swagger-ui/swagger-nuget.png">
 
 
@@ -377,7 +377,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>專案開始進行後，通常會需要輔助型文件來與技術人員溝通，甚至互相調用，做 Web API 尤其需要，與 iOS 、Android 和前端溝通，此時 Web API 如果有文件，溝通起來就會相對方便，而且開發人員通常沒有甚至懶的寫，因為寫文檔其實很花時間，所以 Swagger 就變成一大利器，以下就來介紹 Swagger 如何安裝。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>專案開始進行後，通常會需要輔助型文件來與技術人員溝通，甚至互相調用，做 Web API 尤其需要，與 iOS 、Android 和前端溝通，此時 Web API 如果有文件，溝通起來就會相對方便，而且開發人員通常沒有甚至懶的寫，因為寫文檔其實很花時間，所以 Swagger 就變成一大利器，以下就來介紹 Swagger 如何安裝。<br><a id="more"></a></p>
 <h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><ol>
 <li><p>從 Nuget 下載 Swashbuckle<br>點開「管理 Nuget 程序包」</p>
 <img src="/posts/asp-net-web-api-document-swagger-ui/swagger-nuget.png" width="400">
@@ -439,9 +439,9 @@
           
             <a href="/tags/ASP-NET-MVC-WebAPI/" rel="tag"># ASP.NET MVC WebAPI</a>
           
-            <a href="/tags/Web-API/" rel="tag"># Web API</a>
-          
             <a href="/tags/ASP-NET-MVC/" rel="tag"># ASP.NET MVC</a>
+          
+            <a href="/tags/Web-API/" rel="tag"># Web API</a>
           
         </div>
       
