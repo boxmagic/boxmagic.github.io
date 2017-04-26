@@ -2,6 +2,90 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://boxmagic.github.io/posts/faster-sql-create-table/</loc>
+    
+    <lastmod>2017-04-26T15:36:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10789/</loc>
+    
+    <lastmod>2017-04-26T15:08:01.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10812/</loc>
+    
+    <lastmod>2017-04-26T15:04:36.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-11069/</loc>
+    
+    <lastmod>2017-04-26T15:02:01.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-484/</loc>
+    
+    <lastmod>2017-04-26T14:58:44.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10209/</loc>
+    
+    <lastmod>2017-04-26T14:57:41.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10107/</loc>
+    
+    <lastmod>2017-04-26T14:52:33.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10082/</loc>
+    
+    <lastmod>2017-04-26T14:50:06.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10220/</loc>
+    
+    <lastmod>2017-04-26T14:50:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-623/</loc>
+    
+    <lastmod>2017-04-26T14:49:53.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10071/</loc>
+    
+    <lastmod>2017-04-26T14:49:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/vscode-change-font-size/</loc>
+    
+    <lastmod>2017-04-26T13:52:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://boxmagic.github.io/posts/sql-server-date-convert/</loc>
     
     <lastmod>2017-04-25T16:34:25.000Z</lastmod>
