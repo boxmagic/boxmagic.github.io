@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C#,Thread,Lock,InterLocked,Monitor,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling," />
+  <meta name="keywords" content="C#,Thread,InterLocked,Monitor,Lock,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling," />
 
 
 
@@ -88,7 +88,7 @@
 
 
 <meta name="description" content="前言上次分享過在預存程序 ( Stored Procedure ) 併發問題，利用 MSSQL 內的，現在碰到程式內需要處理使用者在申請出款時，可能因為驗證時間過於複雜，導致於寫入出入款表時，平白無故多出一筆金額相同的出款記錄，但申請時間卻相差六秒，所以我利用互斥鎖 ( Monitor ) 來解決這個問題，不過在解決這個問題，意外認識到許多同步鎖，以下就來一一介紹。">
-<meta name="keywords" content="C#,Thread,Lock,InterLocked,Monitor,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling">
+<meta name="keywords" content="C#,Thread,InterLocked,Monitor,Lock,ReadWriteLock,Mutex,Semaphore,ManualResetEvent,AutoResetEvent,Thread Pooling">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C# 實作多執行緒的同步方法">
 <meta property="og:url" content="http://boxmagic.github.io/posts/several-methods-of-multithreading-synchronization/index.html">
@@ -458,11 +458,11 @@
           
             <a href="/tags/Thread/" rel="tag"># Thread</a>
           
-            <a href="/tags/Lock/" rel="tag"># Lock</a>
-          
             <a href="/tags/InterLocked/" rel="tag"># InterLocked</a>
           
             <a href="/tags/Monitor/" rel="tag"># Monitor</a>
+          
+            <a href="/tags/Lock/" rel="tag"># Lock</a>
           
             <a href="/tags/ReadWriteLock/" rel="tag"># ReadWriteLock</a>
           
@@ -578,7 +578,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">41</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>

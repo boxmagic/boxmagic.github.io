@@ -2,6 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://boxmagic.github.io/posts/acm-793/</loc>
+    
+    <lastmod>2017-05-02T14:50:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/postman-auth-set-accesstoken/</loc>
+    
+    <lastmod>2017-05-02T14:50:17.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-876/</loc>
+    
+    <lastmod>2017-05-02T12:12:43.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10473/</loc>
+    
+    <lastmod>2017-04-26T17:51:29.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10209/</loc>
+    
+    <lastmod>2017-04-26T17:49:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10473/</loc>
+    
+    <lastmod>2017-04-26T17:43:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://boxmagic.github.io/posts/faster-sql-create-table/</loc>
     
     <lastmod>2017-04-26T15:36:56.000Z</lastmod>
@@ -33,13 +75,6 @@
     <loc>http://boxmagic.github.io/posts/acm-484/</loc>
     
     <lastmod>2017-04-26T14:58:44.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://boxmagic.github.io/posts/acm-10209/</loc>
-    
-    <lastmod>2017-04-26T14:57:41.000Z</lastmod>
     
   </url>
   
