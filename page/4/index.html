@@ -257,6 +257,479 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10219/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-10219/" itemprop="url">
+                  ACM 10219 Doom's Day Algorithm
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2011-07-10T12:52:00+08:00">
+                2011-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-10219/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-10219/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>先對 Doom’s Day 做解釋。</p>
+<p>這個神奇的方法就叫做 “Doomsday Algorithm”，詳細的原理就是… 每一年的二月的最後一天 (2/28 或 2/29)，和 4/4、6/6、8/8、10/10、12/12，和 9/5、5/9、7/11、11/7 (記憶口訣是 “我在 7-11 的工作時間是朝 9 晚 5″)，和 3/7 (二月最後一天的一星期後)，和 1/3 (西元年不可被 4 整除) 或 1/4 (可以被 4 整除)，這些日子的星期都是一樣的，這一天叫做 Doomsday，而上面這些日子就是一年中每個月的基準日，只要配合簡單的餘數運算就可以求出今年其他日子是星期幾啦。</p>
+<p>但是如果要算其他年份，例如說去年的 Doomsday，怎麼辦呢 ? 因為 365 除以 7 會餘 1，也就是說每一個平常年 Doomsday 會跳一天，而閏年則會跳兩天；這樣一天，其他年份的 Doomsday 也就可以求出來，所以上面的算法也可以引申到其他年份啦。對於 19XX 年來說還有另一個速算法：先記住 1900 年的 Doomsday 是星期三；然後把 XX/12 的商和餘數，以及餘數除以 4 所得的商數，把這三個數字加起來以後，再除以 7，所得的餘數就是該年份 Doomsday 和星期三的相差數了。例如說 1937 年，XX = 37，37 / 12 商是 3 餘數是 1，1 /4 的商是 0，3 + 1 + 0 = 4，星期三再加 4 天就是星期天，也就是說 1937 年的 Doomsday 是星期天。</p>
+<p>可是上面只有對 19xx 年有效啊，能推廣到其他的世紀去嗎 ? 其實是可以的，只要知道了該世紀的基準日就可以算了。經由觀察可以得知各世紀的 Doomsday 是以 “五三二日” 的循環在輪替，也就是說 1900 年是星期三，則 1800 年就是前一個，也就是星期五，而 2000 年就是星期二了。這就是世紀基準日的速記法。有了該世紀的基準日的話，就可以套用上一段所說的算法來計算該世紀任一天的星期了。</p>
+<p>不過說實在的，上面這些步驟也確實太麻煩啦 !! 所以下面就有人發明了速算法：一樣是要先知道每個月的 Doomsday 基準日是那一天，然後算出你要求的日期和基準日差幾天，再把上面講的年份的那三個數字加起來，就加上該世紀 Doomsday 的星期，就是所求的那天是星期幾了。舉例來說，1937/7/7 (七七事變) 是星期幾呢 ? 先前提過，7/11 是 Doomsday，所以 7/7 就是 -4 的差距；37/12=3…1，1/4=0，-4 + 3 + 1 + 0 = 0；而 1900 年的 Doomsday 是星期三，再加上 0 天的差距，就是告訴我們 1937/7/7 是星期三。</p>
+<p>以上引用自 <a href="http://blog.ijliao.info/archives/2004/04/07/321/" target="_blank" rel="external">http://blog.ijliao.info/archives/2004/04/07/321/</a></p>
+<p>因為我們已經知道年份為 2011，而 2011 年 Doomsday 為星期一，其實也只要用一個陣列來加加減減就好了<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> week[<span class="number">7</span>][<span class="number">10</span>] = &#123;<span class="string">"Monday"</span>, <span class="string">"Tuesday"</span>, <span class="string">"Wednesday"</span>, <span class="string">"Thursday"</span>, <span class="string">"Friday"</span>, <span class="string">"Saturday"</span>, <span class="string">"Sunday"</span>&#125;;</div><div class="line"><span class="keyword">int</span> month[<span class="number">13</span>] = &#123;<span class="number">-1</span> ,<span class="number">3</span>, <span class="number">28</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">6</span>, <span class="number">11</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">7</span>, <span class="number">12</span>&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span>(<span class="params"><span class="keyword">int</span> m, <span class="keyword">int</span> d</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> index = (d - month[m]) % <span class="number">7</span>;</div><div class="line">    index = index % <span class="number">7</span> &lt; <span class="number">0</span> ? index + <span class="number">7</span>: index;</div><div class="line">    printf(<span class="string">"%s\n"</span>, week[index]);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>讀入月份和日期，呼叫 find(m, d) 即可。 </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-11244/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-11244/" itemprop="url">
+                  ACM 11244 Counting Stars，星星 ? 物體 ?
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2011-06-26T16:08:00+08:00">
+                2011-06-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-11244/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-11244/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>此題利用深度優先搜尋法即可解決問題。重點 C 語言程式碼如下：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> map</div><div class="line">&#123;</div><div class="line">    <span class="keyword">char</span> line[<span class="number">104</span>];</div><div class="line">&#125;data[<span class="number">104</span>];</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">findStar</span>(<span class="params"><span class="keyword">int</span> i, <span class="keyword">int</span> j</span>)</span></div><div class="line">&#123;</div><div class="line">    isOne ++;</div><div class="line">    data[i].line[j] = <span class="string">'.'</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (i - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; j - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; data[i - <span class="number">1</span>].line[j - <span class="number">1</span>] == <span class="string">'*'</span>)</div><div class="line">       findStar(i - <span class="number">1</span>, j - <span class="number">1</span>);</div><div class="line">    <span class="keyword">if</span> (j - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; data[i].line[j - <span class="number">1</span>] == <span class="string">'*'</span>)</div><div class="line">       findStar(i, j - <span class="number">1</span>);</div><div class="line">    <span class="keyword">if</span> (i + <span class="number">1</span> &lt; r &amp;&amp; j - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; data[i + <span class="number">1</span>].line[j - <span class="number">1</span>] == <span class="string">'*'</span>)</div><div class="line">       findStar(i + <span class="number">1</span>, j - <span class="number">1</span>);</div><div class="line">       </div><div class="line">    <span class="keyword">if</span> (i - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; data[i - <span class="number">1</span>].line[j] == <span class="string">'*'</span>)</div><div class="line">       findStar(i - <span class="number">1</span>, j);</div><div class="line">    <span class="keyword">if</span> (i + <span class="number">1</span> &lt; r &amp;&amp; data[i + <span class="number">1</span>].line[j] == <span class="string">'*'</span>)</div><div class="line">       findStar(i + <span class="number">1</span>, j);    </div><div class="line">       </div><div class="line">    <span class="keyword">if</span> (i - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; j + <span class="number">1</span> &lt; c &amp;&amp; data[i - <span class="number">1</span>].line[j + <span class="number">1</span>] == <span class="string">'*'</span>)</div><div class="line">       findStar(i - <span class="number">1</span>, j + <span class="number">1</span>);    </div><div class="line">    <span class="keyword">if</span> (j + <span class="number">1</span> &lt; c &amp;&amp; data[i].line[j + <span class="number">1</span>] == <span class="string">'*'</span>)</div><div class="line">       findStar(i, j + <span class="number">1</span>);    </div><div class="line">    <span class="keyword">if</span> (i + <span class="number">1</span> &lt; r &amp;&amp; j + <span class="number">1</span> &lt; c &amp;&amp; data[i + <span class="number">1</span>].line[j + <span class="number">1</span>] == <span class="string">'*'</span>)</div><div class="line">       findStar(i + <span class="number">1</span>, j + <span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">而主程式內需如此呼叫：</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; r; i ++)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; c; j ++)</div><div class="line">    &#123;</div><div class="line">        isOne = <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (data[i].line[j] == <span class="string">'*'</span>) findStar(i, j);</div><div class="line">        <span class="keyword">if</span> (isOne == <span class="number">1</span>) count ++;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打完收假。 </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10473/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-10473/" itemprop="url">
+                  ACM 10550 Combination Lock，轉動多少角度
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-02-03T10:24:00+08:00">
+                2010-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-10473/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-10473/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10550 此題是輸入刻度開始位置、第一個密碼、第二個密碼、第三個密碼，接著請你算出要開鎖的話，需轉動多少角度。</p>
+<p>仔細觀察鎖的構造，不難發現它如果順時針轉，對於刻度則是逆時針轉；反之，則相反。所以只須設定幾個條件即可求出答案。</p>
+<p>以下為主程式區段程式碼：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">scanf</span>(<span class="string">"%d %d %d %d"</span>,&amp;startNum, &amp;pw1, &amp;pw2, &amp;pw3);</div><div class="line"><span class="keyword">if</span> (startNum == <span class="number">0</span> &amp;&amp; pw1 == <span class="number">0</span> &amp;&amp; pw2 == <span class="number">0</span> &amp;&amp; pw3 == <span class="number">0</span>) <span class="keyword">break</span>;</div><div class="line">sum = <span class="number">720</span> + <span class="number">360</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (startNum &gt;= pw1) sum += (startNum - pw1) * <span class="number">9</span>;</div><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (startNum &lt; pw1) sum += (startNum + <span class="number">40</span> - pw1) * <span class="number">9</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (pw1 &gt; pw2) sum += (<span class="number">40</span> - pw1 + pw2) * <span class="number">9</span>;</div><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (pw1 &lt;= pw2) sum += (pw2 - pw1) * <span class="number">9</span>;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10473/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1355,475 +1828,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10071/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-10071/" itemprop="url">
-                  ACM 10071 Back to High School Physics，粒子移動距離
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-26T18:28:00+08:00">
-                2010-01-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-10071/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-10071/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10071 定義粒子在 t 秒後速度為 v ，而在 2t 秒，移動的距離為多少。</p>
-<p>此題只需將公式導出來即可。<br>加速度 a = v / t = m / t<sup>2</sup>，則 v = m / t ，m = v * t， 2m 為其解。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10220/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-10220/" itemprop="url">
-                  ACM 10220 I Love Big Numbers !，階乘數字的累加
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-26T17:15:00+08:00">
-                2010-01-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-10220/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-10220/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10220 是輸入一個 n 值，將 n! (n 的階乘)計算出來後，再將它每個位數累加。</p>
-<p>例如：n 值為5，5! = 120，1 + 2 + 0 = 3，則輸出 3。<br>此題與 <a href="/posts/acm-623">ACM 623</a> 非常相似，只是輸出需要稍作改變，將要印出來的值用一個整數累加即可。</p>
-<p>主程式區段程式碼如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (i = MAXLEN - <span class="number">1</span>; i &gt; <span class="number">0</span>; i --)</div><div class="line">  <span class="keyword">if</span> (Factorial[n][i] != <span class="number">0</span>)</div><div class="line">     <span class="keyword">break</span>;</div><div class="line"><span class="keyword">for</span> (; i &gt;= <span class="number">0</span>; i --)</div><div class="line">  total += Factorial[n][i];</div><div class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>, total);</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10082/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-10082/" itemprop="url">
-                  ACM 10082 WERTYU，修正錯字
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-26T15:57:00+08:00">
-                2010-01-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-10082/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-10082/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10082 是要將打錯的字修正回來。</p>
-<p>常見的打字錯誤就是手擺到不對的位置，此題很顯然地手是擺到右邊一格鍵上，首先，我們必須建立一個函式來處理這些錯誤的字元並修正，只需用到 if-else 判斷式就可以了。</p>
-<p>函式區段程式碼如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">char</span> <span class="title">Correct</span> <span class="params">(<span class="keyword">char</span> ch)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">if</span> (ch == <span class="string">'1'</span>) <span class="keyword">return</span> <span class="string">'`'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'2'</span>) <span class="keyword">return</span> <span class="string">'1'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'3'</span>) <span class="keyword">return</span> <span class="string">'2'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'4'</span>) <span class="keyword">return</span> <span class="string">'3'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'5'</span>) <span class="keyword">return</span> <span class="string">'4'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'6'</span>) <span class="keyword">return</span> <span class="string">'5'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'7'</span>) <span class="keyword">return</span> <span class="string">'6'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'8'</span>) <span class="keyword">return</span> <span class="string">'7'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'9'</span>) <span class="keyword">return</span> <span class="string">'8'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'0'</span>) <span class="keyword">return</span> <span class="string">'9'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'-'</span>) <span class="keyword">return</span> <span class="string">'0'</span>;</div><div class="line">  .....</div><div class="line">  .....</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>主程式內只需要將每個字元丟入函式修正後輸出即可。</p>
-<p>主程式區段程式碼如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;</div><div class="line">  <span class="keyword">char</span> str[<span class="number">100</span>] = &#123;<span class="string">"\0"</span>&#125;;</div><div class="line">  <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">  gets(str);</div><div class="line">  <span class="keyword">if</span>(str[<span class="number">0</span>]==<span class="string">'\0'</span>) <span class="keyword">break</span>;</div><div class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; str[i]; i ++)</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"%c"</span>, Correct(str[i]));</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"\n"</span>);  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1873,7 +1877,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">44</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
