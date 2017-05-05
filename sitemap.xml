@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://boxmagic.github.io/posts/sql-where-today/</loc>
+    
+    <lastmod>2017-05-05T14:39:50.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-11805/</loc>
+    
+    <lastmod>2017-05-04T14:42:10.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10579/</loc>
+    
+    <lastmod>2017-05-04T14:39:08.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10852/</loc>
+    
+    <lastmod>2017-05-04T14:36:20.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://boxmagic.github.io/posts/acm-11244/</loc>
     
-    <lastmod>2017-05-02T16:36:08.000Z</lastmod>
+    <lastmod>2017-05-02T16:42:48.000Z</lastmod>
     
   </url>
   
