@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="程式設計筆記">
 <meta property="og:description" content="前言今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息  已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法">
 <meta property="og:image" content="http://boxmagic.github.io/posts/sql-quoted-identifier-problem/sqlcmd2.png">
-<meta property="og:updated_time" content="2017-05-06T14:21:43.000Z">
+<meta property="og:updated_time" content="2017-05-06T14:22:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL">
 <meta name="twitter:description" content="前言今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息  已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法">
@@ -372,7 +372,8 @@
 <p>已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法和/或空间索引操作。。 [SQLSTATE 42000] (错误 1934).  该步骤失败。<br><a id="more"></a></p>
 </blockquote>
 <h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>  開啟 SQL Server Management Studio<br>  工具 &gt; 選項 &gt; 執行查詢 &gt; SQL Server &gt; ANSI &gt; SET QUOTED_IDENTIFIER 打勾</p>
-  <img src="/posts/sql-quoted-identifier-problem/sqlcmd2.png" width="500"> 
+  <p><img src="/posts/sql-quoted-identifier-problem/sqlcmd2.png" width="500"></p>
+
 <blockquote>
 <p>SET QUOTED_IDENTIFIER OFF语句的作用<br>　当在数据库中新建一个名字是USER的表的时候，常常会带来一些麻烦，因为USER是SQL中的关键字，但是上面的几个语句不会报错。再说一个概念：标示符是SQL中的中括号[]。<br>当SET QUOTED_IDENTIFIER值为ON时，双引号内的字符被当作是数据库对象。就是说双引号” “和标识符[]效果是一样样的，他们都表示引用的字符是数据库对象。单引号’表示字符串的边界。<br>当SET QUOTDE_IDENTIFIER OFF时，双引号被解释为字符串的边界，和单引号的作用是类似的。就是说双引号”不能当做标识符使用，但是可以当做字符边界，和单引号’的效果是一样样的。<br>可以做一个总结：当SET QUOTED_IDENTIFIER ON “ “等同于[ ] 表示数据库对象；当SET QUOTED_IDENTIFIER OFF “ “等同于’ ‘表示字符串边界；还有这里的双引号” 并不是两个单引号’合起来的，是shift+”打出来的，初学者可能会犯这样的错误。</p>
 </blockquote>
