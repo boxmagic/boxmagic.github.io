@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="程式設計筆記">
 <meta property="og:description" content="前言今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息  已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法">
 <meta property="og:image" content="http://boxmagic.github.io/posts/sql-quoted-identifier-problem/sqlcmd2.png">
-<meta property="og:updated_time" content="2017-05-06T14:22:52.000Z">
+<meta property="og:updated_time" content="2017-05-06T14:23:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL">
 <meta name="twitter:description" content="前言今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息  已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法">
@@ -369,8 +369,9 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息</p>
 <blockquote>
-<p>已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法和/或空间索引操作。。 [SQLSTATE 42000] (错误 1934).  该步骤失败。<br><a id="more"></a></p>
+<p>已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法和/或空间索引操作。。 [SQLSTATE 42000] (错误 1934).  该步骤失败。</p>
 </blockquote>
+<a id="more"></a>
 <h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>  開啟 SQL Server Management Studio<br>  工具 &gt; 選項 &gt; 執行查詢 &gt; SQL Server &gt; ANSI &gt; SET QUOTED_IDENTIFIER 打勾</p>
   <p><img src="/posts/sql-quoted-identifier-problem/sqlcmd2.png" width="500"></p>
 
