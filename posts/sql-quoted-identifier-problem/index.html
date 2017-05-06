@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Google Cloud Platform,VM," />
+  <meta name="keywords" content="SQL," />
 
 
 
@@ -87,30 +87,19 @@
 
 
 
-<meta name="description" content="前言最近看到有許多朋友網站從國外的 Hosting 轉移至 Google Cloud Platform，原因是因為他在台灣有機房，他也是三大雲端供應商之一(其他雲端供應商分別為 AWS 和 Azure)，價格低廉、可隨時取消、PAYG (Pay As You Go) … 等等優點，而且後台比一般國外的 Hosting 還來得友善，更容易上手。">
-<meta name="keywords" content="Google Cloud Platform,VM">
+<meta name="description" content="前言今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息  已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法">
+<meta name="keywords" content="SQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Google Cloud Platform 建立 VM">
-<meta property="og:url" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/index.html">
+<meta property="og:title" content="SQL">
+<meta property="og:url" content="http://boxmagic.github.io/posts/sql-quoted-identifier-problem/index.html">
 <meta property="og:site_name" content="程式設計筆記">
-<meta property="og:description" content="前言最近看到有許多朋友網站從國外的 Hosting 轉移至 Google Cloud Platform，原因是因為他在台灣有機房，他也是三大雲端供應商之一(其他雲端供應商分別為 AWS 和 Azure)，價格低廉、可隨時取消、PAYG (Pay As You Go) … 等等優點，而且後台比一般國外的 Hosting 還來得友善，更容易上手。">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-MENU.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-VM.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-select-OS.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-Management.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-Network.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-reservation-IP.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-reservation-IP-Success.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-VM-Build-Success.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-VM-Connection.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-Create-Account.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-get-account-password.png">
-<meta property="og:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-VM-Startup.png">
-<meta property="og:updated_time" content="2017-04-15T17:25:10.000Z">
+<meta property="og:description" content="前言今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息  已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法">
+<meta property="og:image" content="http://boxmagic.github.io/posts/sql-quoted-identifier-problem/sqlcmd2.png">
+<meta property="og:updated_time" content="2017-05-06T14:21:43.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Google Cloud Platform 建立 VM">
-<meta name="twitter:description" content="前言最近看到有許多朋友網站從國外的 Hosting 轉移至 Google Cloud Platform，原因是因為他在台灣有機房，他也是三大雲端供應商之一(其他雲端供應商分別為 AWS 和 Azure)，價格低廉、可隨時取消、PAYG (Pay As You Go) … 等等優點，而且後台比一般國外的 Hosting 還來得友善，更容易上手。">
-<meta name="twitter:image" content="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/GCP-MENU.png">
+<meta name="twitter:title" content="SQL">
+<meta name="twitter:description" content="前言今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息  已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法">
+<meta name="twitter:image" content="http://boxmagic.github.io/posts/sql-quoted-identifier-problem/sqlcmd2.png">
 
 
 
@@ -138,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/"/>
+  <link rel="canonical" href="http://boxmagic.github.io/posts/sql-quoted-identifier-problem/"/>
 
 
 
 
 
-  <title> Google Cloud Platform 建立 VM | 程式設計筆記 </title>
+  <title> SQL | 程式設計筆記 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
@@ -273,7 +262,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/build-google-cloud-platform-vm/">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/sql-quoted-identifier-problem/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David">
@@ -294,7 +283,7 @@
             
             
               
-                Google Cloud Platform 建立 VM
+                SQL
               
             
           </h1>
@@ -309,8 +298,8 @@
               
                 <span class="post-meta-item-text">發表於</span>
               
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-04-13T19:30:54+08:00">
-                2017-04-13
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-05-06T21:52:17+08:00">
+                2017-05-06
               </time>
             
 
@@ -332,19 +321,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Google-Cloud-Platform/" itemprop="url" rel="index">
-                    <span itemprop="name">Google Cloud Platform</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Google-Cloud-Platform/VM/" itemprop="url" rel="index">
-                    <span itemprop="name">VM</span>
+                  <a href="/categories/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
                   </a>
                 </span>
 
@@ -361,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/build-google-cloud-platform-vm/#comments" itemprop="discussionUrl">
+                <a href="/posts/sql-quoted-identifier-problem/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/build-google-cloud-platform-vm/" itemprop="commentCount"></span>
+                        data-disqus-identifier="posts/sql-quoted-identifier-problem/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -389,35 +367,16 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近看到有許多朋友網站從國外的 Hosting 轉移至 Google Cloud Platform，原因是因為他在台灣有機房，他也是三大雲端供應商之一(其他雲端供應商分別為 AWS 和 Azure)，價格低廉、可隨時取消、PAYG (Pay As You Go) … 等等優點，而且後台比一般國外的 Hosting 還來得友善，更容易上手。<br><a id="more"></a></p>
-<h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><ol>
-<li><p>到 <a href="https://cloud.google.com/" target="_blank" rel="external">Google Cloud Platform</a> 首頁<br>進入到首頁後，按下進入主控台，建立專案，並填寫必要資訊後，進入「Computer Engine」&gt;「VM 執行個體」</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-MENU.png" width="200">
-</li>
-<li><p>建立 VM 執行個體<br>按下建立按鈕之後，會看到以下資訊</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-VM.png" width="300">
-<p>接下來選擇作業系統 (OS)，因為我接下來要架設 SQL Server ，所以使用「 SQL Server 2012 Web On Windows Server 2012 R2 」來建置，它還可以讓你選擇單純的作業系統，除了 Windows，還有 Ubuntu、Red Hat、Container-Optimized OS、CoreOS、Debian GNU 等作業系統。</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-select-OS.png" width="300">
-<p>比較需要注意的是底下「管理」、「網路」的配置</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-Management.png" width="300">
-<p>可以決定 VM 是否自動重新啟動與在主機維護期間是否可以遷移 VM 執行個體。</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-Network.png" width="300">
-<p>網路需要注意的就是「 外部 IP 」的選項，需要預約一組靜態 IP，不然遠端控制時，需要常常換新的 RDP 檔案</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-reservation-IP.png" width="300">
-<p>打上一組識別名稱，按下「預約」</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-reservation-IP-Success.png" width="400">
-<p>當申請成功時，就會給一組獨立的 IP，此時如果 IIS 有架設起來，就可以用此 IP 訪問</p>
-<p>如果沒有其他對 VM 有特殊需求的設定，就可以按下「建立」，過不久，它就會被建立起來</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-VM-Build-Success.png" width="400">
-<p>按下「遠端桌面通訊協定」，會出現下拉式選單，其中「建立或重設 Windows 密碼」選項會建立遠端控制的帳號了，也就是 VM 的使用者<br></p><p><img src="/posts/build-google-cloud-platform-vm/GCP-VM-Connection.png" width="400"></p><p></p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-Create-Account.png" width="400">
-<p>按下「設定」後，系統會給一組隨機密碼，請記住這組密碼</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-get-account-password.png" width="400">
-<p>接著「 下載 RDP 檔案 」，就可以開啟遠程桌面，打上剛剛申請的帳號密碼，就可以進去 VM 去做設定</p>
-<img src="/posts/build-google-cloud-platform-vm/GCP-VM-Startup.png" width="400">
-</li>
-</ol>
-<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="https://cloud.google.com/" target="_blank" rel="external">Google Cloud Platform</a></p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天在處理 SQL 時發現有一隻 Job 死掉了，死得透透的，查了一下 log，發現以下訊息</p>
+<blockquote>
+<p>已以用户 NT SERVICE\SQLSERVERAGENT 的身份执行。 DELETE 失败，因为下列 SET 选项的设置不正确: ‘QUOTED_IDENTIFIER’。请确保 SET 选项正确无误，可以用于 计算列上的索引视图和/或索引和/或筛选的索引和/或查询通知和/或 XML 数据类型方法和/或空间索引操作。。 [SQLSTATE 42000] (错误 1934).  该步骤失败。<br><a id="more"></a></p>
+</blockquote>
+<h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>  開啟 SQL Server Management Studio<br>  工具 &gt; 選項 &gt; 執行查詢 &gt; SQL Server &gt; ANSI &gt; SET QUOTED_IDENTIFIER 打勾</p>
+  <img src="/posts/sql-quoted-identifier-problem/sqlcmd2.png" width="500"> 
+<blockquote>
+<p>SET QUOTED_IDENTIFIER OFF语句的作用<br>　当在数据库中新建一个名字是USER的表的时候，常常会带来一些麻烦，因为USER是SQL中的关键字，但是上面的几个语句不会报错。再说一个概念：标示符是SQL中的中括号[]。<br>当SET QUOTED_IDENTIFIER值为ON时，双引号内的字符被当作是数据库对象。就是说双引号” “和标识符[]效果是一样样的，他们都表示引用的字符是数据库对象。单引号’表示字符串的边界。<br>当SET QUOTDE_IDENTIFIER OFF时，双引号被解释为字符串的边界，和单引号的作用是类似的。就是说双引号”不能当做标识符使用，但是可以当做字符边界，和单引号’的效果是一样样的。<br>可以做一个总结：当SET QUOTED_IDENTIFIER ON “ “等同于[ ] 表示数据库对象；当SET QUOTED_IDENTIFIER OFF “ “等同于’ ‘表示字符串边界；还有这里的双引号” 并不是两个单引号’合起来的，是shift+”打出来的，初学者可能会犯这样的错误。</p>
+</blockquote>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="https://jonesyeh.wordpress.com/2016/10/16/set-quoted_identifier-on/" target="_blank" rel="external">SET QUOTED_IDENTIFIER ON</a><br><a href="http://www.cnblogs.com/tylerdonet/archive/2010/08/01/1789979.html" target="_blank" rel="external">SQL点滴1—SET QUOTED_IDENTIFIER OFF语句的作用</a></p>
 
       
     </div>
@@ -447,9 +406,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Google-Cloud-Platform/" rel="tag"># Google Cloud Platform</a>
-          
-            <a href="/tags/VM/" rel="tag"># VM</a>
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
           
         </div>
       
@@ -462,18 +419,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/how-to-install-hexo-admin/" rel="next" title="如何在 Hexo 安裝管理介面">
-                <i class="fa fa-chevron-left"></i> 如何在 Hexo 安裝管理介面
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/how-to-change-themes-in-hexo/" rel="prev" title="如何在 Hexo 變更佈景主題 ( theme )">
-                如何在 Hexo 變更佈景主題 ( theme ) <i class="fa fa-chevron-right"></i>
+              <a href="/posts/sql-where-today/" rel="prev" title="SQL 取得今日資料">
+                SQL 取得今日資料 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -754,9 +707,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://boxmagic.github.io/posts/build-google-cloud-platform-vm/';
-          this.page.identifier = 'posts/build-google-cloud-platform-vm/';
-          this.page.title = 'Google Cloud Platform 建立 VM';
+          this.page.url = 'http://boxmagic.github.io/posts/sql-quoted-identifier-problem/';
+          this.page.identifier = 'posts/sql-quoted-identifier-problem/';
+          this.page.title = 'SQL';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://boxmagic.disqus.com/embed.js';
