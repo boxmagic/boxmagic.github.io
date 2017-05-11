@@ -280,7 +280,7 @@
               
                 
                 <a class="post-title-link" href="/posts/15-ways-optimize-sql-queries/" itemprop="url">
-                  15-ways-optimize-sql-queries
+                  15 個優化 SQL
                 </a>
               
             
@@ -306,6 +306,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -345,7 +367,57 @@
       
         
           
-            
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ol>
+<li><p>索引 (Indexes)<br>對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。<br>可以使用 SQL Server Management Studio 的語法分析</p>
+</li>
+<li><p>運算子 (Symbol Operator)<br>在查詢資料時，會使用許多運算子 &gt;, &lt;, =, != 在查詢內，可以透過已經建立的索引來加快查詢，例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> HJ_Cash <span class="keyword">WHERE</span> Cash &gt; <span class="number">100</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>模糊搜尋 (Wildcard)<br>在查詢資料時，通常會使用 % 來模糊搜尋，但是這樣會拖慢查詢速度，一旦</p>
+</li>
+<li><p>NOT 運算子<br>盡量避免使用 NOT 在 SQL 查詢內，用非 NOT 的方式達到相同目的，效率會好很多。例如多使用 LIKE, IN, EXIST 或 =，而不要去使用 NOT LIKE, NOT IN, NOT EXIST or !=。使用 NOT 會導致每一筆都要再去數據庫確定不屬於或不存在此資料表。當資料量一大，效能的差距就會出來。</p>
+</li>
+<li><p>COUNT VS EXIST<br>使用 COUNT 來查詢有多少筆資料的存在</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(*) <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> <span class="keyword">column</span> &gt; <span class="number">10</span></div></pre></td></tr></table></figure>
+<p>但這是一個效率非常差的查詢，因為它會去搜尋所有存在資料表上的紀錄，如果只需要判斷找尋存在的功能，則可以用 EXIST 即可，因為它一旦找到，就會停止尋找。</p>
+</li>
+</ol>
+<ol>
+<li><p>Wildcard VS Substr<br>如果欄位有做索引的話，那麼最好使用模糊搜尋，而不是使用 substr</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> <span class="keyword">substr</span> ( <span class="keyword">column</span>, <span class="number">1</span>, <span class="number">1</span> ) = <span class="string">'value'</span></div></pre></td></tr></table></figure>
+<p>上面的查詢會去 substr 每一筆資料就為了找 ‘value’ 這個字串，而</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">TABLE</span> <span class="keyword">WHERE</span>  <span class="keyword">COLUMN</span> = <span class="string">'value%'</span></div></pre></td></tr></table></figure>
+<p>模糊搜尋會比較快，假設 value 是在每一筆資料的最前面的話。</p>
+</li>
+<li><p>Index Unique Column</p>
+</li>
+<li><p>Max and Min 運算子<br>Max 和 Min 是為了找到最大和最小值，如果使用索引的欄位會更快。但假設這個欄位只是為了最大值和最小值而做索引，那就有點不太划算了。</p>
+</li>
+<li><p>資料型態 Data Types<br>盡量使用最有效且最小的資料型態，用太大的資料型態去儲存很小的資料是不必要的。用小的資料型態可以得到比較小的資料表。例如：MEDIUMINT 就比用 INT 好，MEDIUMINT 少了 25% 的空間，儲存 email 或少數資料時 VARCHAR 比 longtext 好。</p>
+</li>
+<li><p>Primary Index<br>Primary 欄位通常都會做索引。所以盡可能讓它越小越好。</p>
+</li>
+<li><p>String indexing<br>假設字串前後綴詞可以被索引的話就不需要對整個字串索引。特別是前後字串提供唯一識別時。越少索引速度會越快。</p>
+</li>
+<li><p>限制回傳筆數<br>限制查詢筆數是一個常見的優化方式，當數據庫一大，效能就會有很大的差距</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span></div></pre></td></tr></table></figure>
+<p>因此，在查詢時盡量限制回傳筆數，另一方面，在遇到 SQL Injection 攻擊時，可以降低損害程度</p>
+</li>
+<li><p>使用預設值<br>如果使用 MySQL 時，盡量使用 Default 值，Insert values 只有跟 Default 不一樣時才用，在 MySQL 裡，可以減少一次解析時間，並加快寫入速度。</p>
+</li>
+<li><p>In 子查詢<br>通常會使用 in 來做子查詢</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> <span class="keyword">Column</span> <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="keyword">Column</span> <span class="keyword">FROM</span> <span class="keyword">Table</span>)</div><div class="line"><span class="string">``</span><span class="string">` </span></div><div class="line">這是一個很耗資源的查詢，SQL 會先處理內部查詢，再處理外部</div><div class="line">`<span class="string">``</span> <span class="keyword">sql</span> </div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span>, (<span class="keyword">SELECT</span> <span class="keyword">Column</span> <span class="keyword">FROM</span> <span class="keyword">Table</span>) <span class="keyword">as</span> dummytable</div><div class="line"><span class="keyword">WHERE</span> dummytable.Column = Table.Column</div></pre></td></tr></table></figure>
+<p>使用自訂表會比 in 來得好用，另外，用 EXIST 也不錯</p>
+</li>
+<li><p>Utilize Union instead of OR<br>在 MySQL 裡面，用了 OR 會讓查詢的速度優勢不見，就算欄位做索引也不會有太大效用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> Column_A = <span class="string">'value'</span> <span class="keyword">OR</span> Column_B = <span class="string">'value'</span></div></pre></td></tr></table></figure>
+<p>上述的指令可以改成使用 union</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> Column_A = <span class="string">'value'</span></div><div class="line"><span class="keyword">UNION</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> Column_B = <span class="string">'value'</span></div></pre></td></tr></table></figure>
+<p>使用 union，效率比較高</p>
+</li>
+</ol>
+<h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://blog.davidou.org/archives/609" target="_blank" rel="external">15個優化你的sql Query的方式</a><br><a href="https://hungred.com/useful-information/ways-optimize-sql-queries/" target="_blank" rel="external">15 Ways to Optimize Your SQL Queries</a></p>
+
           
         
       
