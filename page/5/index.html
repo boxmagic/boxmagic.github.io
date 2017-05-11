@@ -257,6 +257,475 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10452/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-10452/" itemprop="url">
+                  ACM 10452 Marcus
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-07-11T12:55:00+08:00">
+                2010-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-10452/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-10452/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>給你一陣列，要你求出從字元 ‘@’( 一定在最後一排 )到字元 ‘#’( 一定在第一排 )，按照字串 “IEHOVA” 走法，列出怎麼走才會走的到字元 ‘#’ 的走法。</p>
+<p>所以先寫好一字串，讓它走一步可以比對索引字元，若不對，則不走；若走到，則印出。用一遞迴函式實現，i, j 為目前位置，index 為目前字串索引：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">define SIZE <span class="number">8</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> LEN 7</span></div><div class="line"><span class="keyword">int</span> n, row, col, sI, sJ, eI, eJ;</div><div class="line"></div><div class="line"><span class="keyword">char</span> letters[LEN + <span class="number">1</span>] = &#123;<span class="string">'@'</span>, <span class="string">'I'</span>, <span class="string">'E'</span>, <span class="string">'H'</span>, <span class="string">'O'</span>, <span class="string">'V'</span>, <span class="string">'A'</span>, <span class="string">'#'</span>&#125;;</div><div class="line"><span class="keyword">char</span> path[LEN];</div><div class="line"><span class="keyword">char</span> stone[SIZE][SIZE + <span class="number">1</span>];</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">visit</span>(<span class="params"><span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> index</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (letters[index] != stone[i][j]) <span class="keyword">return</span>;</div><div class="line">    <span class="keyword">if</span> (i == eI &amp;&amp; j == eJ)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> k;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (path[<span class="number">0</span>] == <span class="string">'r'</span>) printf(<span class="string">"right"</span>);</div><div class="line">        <span class="function"><span class="keyword">else</span> <span class="title">if</span> (<span class="params">path[<span class="number">0</span>] == <span class="string">'l'</span></span>) <span class="title">printf</span>(<span class="params"><span class="string">"left"</span></span>)</span>;</div><div class="line">        <span class="function"><span class="keyword">else</span> <span class="title">if</span> (<span class="params">path[<span class="number">0</span>] == <span class="string">'f'</span></span>) <span class="title">printf</span>(<span class="params"><span class="string">"forth"</span></span>)</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (k = <span class="number">1</span>; k &lt; LEN; k ++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (path[k] == <span class="string">'r'</span>) printf(<span class="string">" right"</span>);</div><div class="line">            <span class="function"><span class="keyword">else</span> <span class="title">if</span> (<span class="params">path[k] == <span class="string">'l'</span></span>) <span class="title">printf</span>(<span class="params"><span class="string">" left"</span></span>)</span>;</div><div class="line">            <span class="function"><span class="keyword">else</span> <span class="title">if</span> (<span class="params">path[k] == <span class="string">'f'</span></span>) <span class="title">printf</span>(<span class="params"><span class="string">" forth"</span></span>)</span>;</div><div class="line">        &#125;</div><div class="line">        printf(<span class="string">"\n"</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">/* 左 */</span></div><div class="line">    <span class="keyword">if</span> (j - <span class="number">1</span> &gt;= <span class="number">0</span>) path[index] = <span class="string">'l'</span>, visit(i, j - <span class="number">1</span>, index + <span class="number">1</span>);</div><div class="line">    <span class="comment">/* 右 */</span></div><div class="line">    <span class="keyword">if</span> (j + <span class="number">1</span> &lt; col) path[index] = <span class="string">'r'</span>, visit(i, j + <span class="number">1</span>, index + <span class="number">1</span>);</div><div class="line">    <span class="comment">/* 前 */</span></div><div class="line">    <span class="keyword">if</span> (i - <span class="number">1</span> &gt;= <span class="number">0</span>) path[index] = <span class="string">'f'</span>, visit(i - <span class="number">1</span>, j, index + <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>最後，在主程式如此呼叫：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">scanf(<span class="string">"%d %d"</span>, &amp;row, &amp;col);  </div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; row; i ++)</div><div class="line">&#123;</div><div class="line">    scanf(<span class="string">"%s"</span>, stone[i]);</div><div class="line">    <span class="keyword">if</span> (i == <span class="number">0</span>)</div><div class="line">    &#123; </div><div class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; col; j ++)</div><div class="line">            <span class="keyword">if</span> (stone[i][j] == <span class="string">'#'</span>) eI = i, eJ = j;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (i == row - <span class="number">1</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; col; j ++)</div><div class="line">            <span class="keyword">if</span> (stone[i][j] == <span class="string">'@'</span>) sI = i, sJ = j;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">visit(sI, sJ, <span class="number">0</span>);</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10473/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-10473/" itemprop="url">
+                  ACM 10550 Combination Lock，轉動多少角度
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-02-03T10:24:00+08:00">
+                2010-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-10473/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-10473/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10550 此題是輸入刻度開始位置、第一個密碼、第二個密碼、第三個密碼，接著請你算出要開鎖的話，需轉動多少角度。</p>
+<p>仔細觀察鎖的構造，不難發現它如果順時針轉，對於刻度則是逆時針轉；反之，則相反。所以只須設定幾個條件即可求出答案。</p>
+<p>以下為主程式區段程式碼：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">scanf</span>(<span class="string">"%d %d %d %d"</span>,&amp;startNum, &amp;pw1, &amp;pw2, &amp;pw3);</div><div class="line"><span class="keyword">if</span> (startNum == <span class="number">0</span> &amp;&amp; pw1 == <span class="number">0</span> &amp;&amp; pw2 == <span class="number">0</span> &amp;&amp; pw3 == <span class="number">0</span>) <span class="keyword">break</span>;</div><div class="line">sum = <span class="number">720</span> + <span class="number">360</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (startNum &gt;= pw1) sum += (startNum - pw1) * <span class="number">9</span>;</div><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (startNum &lt; pw1) sum += (startNum + <span class="number">40</span> - pw1) * <span class="number">9</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (pw1 &gt; pw2) sum += (<span class="number">40</span> - pw1 + pw2) * <span class="number">9</span>;</div><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (pw1 &lt;= pw2) sum += (pw2 - pw1) * <span class="number">9</span>;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10473/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-10473/" itemprop="url">
+                  ACM 10473 Simple Base Conversion，數值轉換
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-02-02T21:50:00+08:00">
+                2010-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-10473/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-10473/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10473 此題是若輸入為一10進位數，則輸出它的16進位數；若輸入一16進位數，則輸出它的10進位數；若輸入負值，則結束。</p>
+<p>此題只需用簡單的格式化輸出即可。以字串讀入輸入數值，若為負值，只需判斷索引為 0 的字元是否為字元 “-“ (減號)；若為16進位數，只需判斷索引為 0 的字元是否為字元 “0”；以上判斷都為否時，則此數為10進位數。</p>
+<p>當讀進10進位數時使用 %d 讀取，使用 0x%X 輸出( %x 為無號的十六進位整數)；讀進16進位數時使用 %x 讀取，使用 %d 輸出即可。</p>
+<p>以下為主程式程式碼：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i, n;</div><div class="line"><span class="keyword">char</span> str[<span class="number">10</span>];</div><div class="line"><span class="keyword">while</span> (<span class="number">1</span>)</div><div class="line">&#123;</div><div class="line">   <span class="built_in">scanf</span> (<span class="string">"%s"</span>, str);</div><div class="line">   <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'-'</span>) <span class="keyword">break</span>;</div><div class="line">   <span class="keyword">else</span> <span class="keyword">if</span> (str[<span class="number">0</span>] != <span class="string">'0'</span>)</div><div class="line">      <span class="built_in">sscanf</span>(str ,<span class="string">"%d"</span> ,&amp;n), <span class="built_in">printf</span>(<span class="string">"0x%X\n"</span>, n);</div><div class="line">   <span class="keyword">else</span></div><div class="line">      <span class="built_in">sscanf</span>(str ,<span class="string">"%x"</span> ,&amp;n), <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, n);</div><div class="line">&#125;   </div><div class="line"><span class="keyword">return</span> <span class="number">0</span>;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10789/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1353,483 +1822,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10220/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-10220/" itemprop="url">
-                  ACM 10220 I Love Big Numbers !，階乘數字的累加
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-26T17:15:00+08:00">
-                2010-01-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-10220/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-10220/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10220 是輸入一個 n 值，將 n! (n 的階乘)計算出來後，再將它每個位數累加。</p>
-<p>例如：n 值為5，5! = 120，1 + 2 + 0 = 3，則輸出 3。<br>此題與 <a href="/posts/acm-623">ACM 623</a> 非常相似，只是輸出需要稍作改變，將要印出來的值用一個整數累加即可。</p>
-<p>主程式區段程式碼如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (i = MAXLEN - <span class="number">1</span>; i &gt; <span class="number">0</span>; i --)</div><div class="line">  <span class="keyword">if</span> (Factorial[n][i] != <span class="number">0</span>)</div><div class="line">     <span class="keyword">break</span>;</div><div class="line"><span class="keyword">for</span> (; i &gt;= <span class="number">0</span>; i --)</div><div class="line">  total += Factorial[n][i];</div><div class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>, total);</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10082/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-10082/" itemprop="url">
-                  ACM 10082 WERTYU，修正錯字
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-26T15:57:00+08:00">
-                2010-01-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-10082/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-10082/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10082 是要將打錯的字修正回來。</p>
-<p>常見的打字錯誤就是手擺到不對的位置，此題很顯然地手是擺到右邊一格鍵上，首先，我們必須建立一個函式來處理這些錯誤的字元並修正，只需用到 if-else 判斷式就可以了。</p>
-<p>函式區段程式碼如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">char</span> <span class="title">Correct</span> <span class="params">(<span class="keyword">char</span> ch)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">if</span> (ch == <span class="string">'1'</span>) <span class="keyword">return</span> <span class="string">'`'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'2'</span>) <span class="keyword">return</span> <span class="string">'1'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'3'</span>) <span class="keyword">return</span> <span class="string">'2'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'4'</span>) <span class="keyword">return</span> <span class="string">'3'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'5'</span>) <span class="keyword">return</span> <span class="string">'4'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'6'</span>) <span class="keyword">return</span> <span class="string">'5'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'7'</span>) <span class="keyword">return</span> <span class="string">'6'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'8'</span>) <span class="keyword">return</span> <span class="string">'7'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'9'</span>) <span class="keyword">return</span> <span class="string">'8'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'0'</span>) <span class="keyword">return</span> <span class="string">'9'</span>;</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">'-'</span>) <span class="keyword">return</span> <span class="string">'0'</span>;</div><div class="line">  .....</div><div class="line">  .....</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>主程式內只需要將每個字元丟入函式修正後輸出即可。</p>
-<p>主程式區段程式碼如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;</div><div class="line">  <span class="keyword">char</span> str[<span class="number">100</span>] = &#123;<span class="string">"\0"</span>&#125;;</div><div class="line">  <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">  gets(str);</div><div class="line">  <span class="keyword">if</span>(str[<span class="number">0</span>]==<span class="string">'\0'</span>) <span class="keyword">break</span>;</div><div class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; str[i]; i ++)</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"%c"</span>, Correct(str[i]));</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"\n"</span>);  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-623/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-623/" itemprop="url">
-                  ACM 623 500!，階乘
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-26T12:56:00+08:00">
-                2010-01-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-623/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-623/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 623 題目要求是要輸入一整數 n，輸出 n! (n 的階乘)。</p>
-<p>此題難在不能直接輸入一個整數 n ，再接著算出答案。因為光是500階乘就有1135長度的數字，何況題目還有個假設說「輸入的 n 值應該是不會超過 1000。」，可想而知，1000階乘的數字有多長了吧(1000階乘有2568長度) !</p>
-<p>再來，做這種相乘一定需要用到陣列，但如果每輸入一次 n 值就要重算一次，那就太花時間了，所以必須使用一個二維陣列來記錄每個階乘的結果，也就是說，1~1000階乘算一次就可以了，只要輸入 n 值，就可依其位置將結果列出來。</p>
-<p>首先先定義最大長度以及陣列要儲存幾個結果：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXLEN 2569</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXROW 1001</span></div><div class="line"><span class="keyword">int</span> Factorial[MAXROW][MAXLEN] = &#123;<span class="number">0</span>&#125;;</div></pre></td></tr></table></figure></p>
-<p>以下為此題重點程式碼：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Factorial[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>, Factorial[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">1</span> ;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">2</span>; i &lt; MAXROW; i ++)</div><div class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; MAXLEN; j++)&#123;</div><div class="line">        Factorial[i][j] += Factorial[i - <span class="number">1</span>][j] * i;</div><div class="line">        <span class="keyword">if</span> (Factorial[i][j] &gt;= <span class="number">10</span>)</div><div class="line">            Factorial[i][j + <span class="number">1</span>] += Factorial[i][j] / <span class="number">10</span>, Factorial[i][j] %= <span class="number">10</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1874,7 +1871,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>

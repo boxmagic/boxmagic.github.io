@@ -1503,7 +1503,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10473/">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10405/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David">
@@ -1525,8 +1525,8 @@
             
               
                 
-                <a class="post-title-link" href="/posts/acm-10473/" itemprop="url">
-                  ACM 10550 Combination Lock，轉動多少角度
+                <a class="post-title-link" href="/posts/acm-10405/" itemprop="url">
+                  ACM 10405 Longest Common Subsequence，最長共同子字串
                 </a>
               
             
@@ -1542,8 +1542,8 @@
               
                 <span class="post-meta-item-text">發表於</span>
               
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-02-03T10:24:00+08:00">
-                2010-02-03
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-07-11T14:20:00+08:00">
+                2010-07-11
               </time>
             
 
@@ -1583,9 +1583,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/acm-10473/#comments" itemprop="discussionUrl">
+                <a href="/posts/acm-10405/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-10473/" itemprop="commentCount"></span>
+                        data-disqus-identifier="posts/acm-10405/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1613,9 +1613,7 @@
       
         
           
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10550 此題是輸入刻度開始位置、第一個密碼、第二個密碼、第三個密碼，接著請你算出要開鎖的話，需轉動多少角度。</p>
-<p>仔細觀察鎖的構造，不難發現它如果順時針轉，對於刻度則是逆時針轉；反之，則相反。所以只須設定幾個條件即可求出答案。</p>
-<p>以下為主程式區段程式碼：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">scanf</span>(<span class="string">"%d %d %d %d"</span>,&amp;startNum, &amp;pw1, &amp;pw2, &amp;pw3);</div><div class="line"><span class="keyword">if</span> (startNum == <span class="number">0</span> &amp;&amp; pw1 == <span class="number">0</span> &amp;&amp; pw2 == <span class="number">0</span> &amp;&amp; pw3 == <span class="number">0</span>) <span class="keyword">break</span>;</div><div class="line">sum = <span class="number">720</span> + <span class="number">360</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (startNum &gt;= pw1) sum += (startNum - pw1) * <span class="number">9</span>;</div><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (startNum &lt; pw1) sum += (startNum + <span class="number">40</span> - pw1) * <span class="number">9</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (pw1 &gt; pw2) sum += (<span class="number">40</span> - pw1 + pw2) * <span class="number">9</span>;</div><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (pw1 &lt;= pw2) sum += (pw2 - pw1) * <span class="number">9</span>;</div></pre></td></tr></table></figure></p>
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>建議大家可以上網去找「最長共同子字串」的演算法，此演算法是由「最長連續共同子字串」推演而來。「最長共同子字串」的方法就是依序比對字串，將最佳比對結果逐一往陣列右下方推，推到最後，答案就出來了。<br>C 語言程式碼如下：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> LEN 1000</span></div><div class="line"></div><div class="line"><span class="keyword">char</span> seq1[LEN + <span class="number">1</span>], seq2[LEN + <span class="number">1</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">lcs_length</span>(<span class="params"><span class="keyword">int</span> s1Len, <span class="keyword">int</span> s2Len</span>) </span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> i, j;</div><div class="line">    <span class="keyword">int</span> table[s1Len + <span class="number">1</span>][s2Len + <span class="number">1</span>];</div><div class="line">    memset(table, <span class="number">0</span>, <span class="keyword">sizeof</span>(table));</div><div class="line"> </div><div class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt;= s1Len; ++i) &#123;</div><div class="line">        <span class="keyword">for</span>(j = <span class="number">1</span>; j &lt;= s2Len; ++j) &#123;</div><div class="line">            <span class="keyword">if</span>(seq1[i - <span class="number">1</span>] == seq2[j - <span class="number">1</span>])</div><div class="line">                table[i][j] = table[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span>;</div><div class="line">            <span class="function"><span class="keyword">else</span> <span class="title">if</span>(<span class="params">table[i - <span class="number">1</span>][j] &gt; table[i][j - <span class="number">1</span>]</span>)</span></div><div class="line">                table[i][j] = table[i - <span class="number">1</span>][j];</div><div class="line">            <span class="keyword">else</span></div><div class="line">                table[i][j] = table[i][j - <span class="number">1</span>];</div><div class="line">        &#125;</div><div class="line">   &#125;</div><div class="line">   <span class="keyword">return</span> table[s1Len][s2Len];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span>(<span class="params"></span>)</span></div><div class="line">&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">while</span> (gets(seq1))</div><div class="line">    &#123;</div><div class="line">        gets(seq2);  </div><div class="line">        <span class="keyword">int</span> s1Len = strlen(seq1), s2Len = strlen(seq2);</div><div class="line">        printf(<span class="string">"%d\n"</span>, lcs_length(s1Len, s2Len));</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
           
         
@@ -1659,7 +1657,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10473/">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10409/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David">
@@ -1681,8 +1679,8 @@
             
               
                 
-                <a class="post-title-link" href="/posts/acm-10473/" itemprop="url">
-                  ACM 10473 Simple Base Conversion，數值轉換
+                <a class="post-title-link" href="/posts/acm-10409/" itemprop="url">
+                  ACM 10409 Die Game，骰子遊戲
                 </a>
               
             
@@ -1698,8 +1696,8 @@
               
                 <span class="post-meta-item-text">發表於</span>
               
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-02-02T21:50:00+08:00">
-                2010-02-02
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-07-11T13:52:00+08:00">
+                2010-07-11
               </time>
             
 
@@ -1739,9 +1737,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/acm-10473/#comments" itemprop="discussionUrl">
+                <a href="/posts/acm-10409/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-10473/" itemprop="commentCount"></span>
+                        data-disqus-identifier="posts/acm-10409/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1769,10 +1767,9 @@
       
         
           
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10473 此題是若輸入為一10進位數，則輸出它的16進位數；若輸入一16進位數，則輸出它的10進位數；若輸入負值，則結束。</p>
-<p>此題只需用簡單的格式化輸出即可。以字串讀入輸入數值，若為負值，只需判斷索引為 0 的字元是否為字元 “-“ (減號)；若為16進位數，只需判斷索引為 0 的字元是否為字元 “0”；以上判斷都為否時，則此數為10進位數。</p>
-<p>當讀進10進位數時使用 %d 讀取，使用 0x%X 輸出( %x 為無號的十六進位整數)；讀進16進位數時使用 %x 讀取，使用 %d 輸出即可。</p>
-<p>以下為主程式程式碼：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i, n;</div><div class="line"><span class="keyword">char</span> str[<span class="number">10</span>];</div><div class="line"><span class="keyword">while</span> (<span class="number">1</span>)</div><div class="line">&#123;</div><div class="line">   <span class="built_in">scanf</span> (<span class="string">"%s"</span>, str);</div><div class="line">   <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'-'</span>) <span class="keyword">break</span>;</div><div class="line">   <span class="keyword">else</span> <span class="keyword">if</span> (str[<span class="number">0</span>] != <span class="string">'0'</span>)</div><div class="line">      <span class="built_in">sscanf</span>(str ,<span class="string">"%d"</span> ,&amp;n), <span class="built_in">printf</span>(<span class="string">"0x%X\n"</span>, n);</div><div class="line">   <span class="keyword">else</span></div><div class="line">      <span class="built_in">sscanf</span>(str ,<span class="string">"%x"</span> ,&amp;n), <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, n);</div><div class="line">&#125;   </div><div class="line"><span class="keyword">return</span> <span class="number">0</span>;</div></pre></td></tr></table></figure></p>
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>首先宣告一結構，紀錄骰子上下東西南北所屬數字為何：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> Dice</div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> up, down, north, east, south, west;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">struct</span> Dice d;</div></pre></td></tr></table></figure></p>
+<p>主程式內，讀入翻動次數 n 次後，先初始化骰子數字各在哪些方位：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">d.up = <span class="number">1</span>, d.down = <span class="number">6</span>, d.north = <span class="number">2</span>,</div><div class="line">d.east = <span class="number">4</span>, d.south = <span class="number">5</span>, d.west = <span class="number">3</span>;</div></pre></td></tr></table></figure></p>
+<p>最後只要依照相對面的骰子總和為 7 以及空間概念，就可寫出來：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (n --)</div><div class="line">&#123;</div><div class="line">    scanf(<span class="string">"%s"</span>, str);  </div><div class="line">    <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'s'</span>) <span class="comment">/* 南 */</span></div><div class="line">        d.south = d.up, d.up = d.north, </div><div class="line">        d.down = <span class="number">7</span> - d.up, d.north = <span class="number">7</span> - d.south;</div><div class="line">    <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'n'</span>) <span class="comment">/* 北 */</span></div><div class="line">        d.down = d.north, d.north = d.up,</div><div class="line">        d.up = <span class="number">7</span> - d.down, d.south = <span class="number">7</span> - d.north;</div><div class="line">    <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'w'</span>)</div><div class="line">        d.down = d.west, d.west = d.up,</div><div class="line">        d.up = <span class="number">7</span> - d.down, d.east = <span class="number">7</span> - d.west;</div><div class="line">    <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'e'</span>)</div><div class="line">        d.east = d.up, d.up = d.west,</div><div class="line">        d.down = <span class="number">7</span> - d.up, d.west = <span class="number">7</span> - d.east;</div><div class="line">&#125;</div><div class="line">printf(<span class="string">"%d\n"</span>, d.up);</div></pre></td></tr></table></figure></p>
 
           
         
@@ -1811,7 +1808,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1856,7 +1853,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>

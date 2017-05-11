@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://boxmagic.github.io/posts/acm-10452/</loc>
+    
+    <lastmod>2017-05-11T15:06:29.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10409/</loc>
+    
+    <lastmod>2017-05-11T15:03:10.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://boxmagic.github.io/posts/acm-10405/</loc>
+    
+    <lastmod>2017-05-11T14:55:50.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/</loc>
     
     <lastmod>2017-05-11T14:43:58.000Z</lastmod>
