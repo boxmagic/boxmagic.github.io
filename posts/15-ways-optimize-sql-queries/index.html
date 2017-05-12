@@ -87,17 +87,24 @@
 
 
 
-<meta name="description" content="前言 索引 (Indexes)對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。可以使用 SQL Server Management Studio 的語法分析  運算子 (Symbol Operator)在查詢資料時，會使用許多運算子 &amp;gt;, &amp;lt;, =, != 在查詢內，可以透過已經建立的索引來加快查詢，例如">
+<meta name="description" content="方法 索引 (Indexes)對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。可以使用 SQL Server Management Studio 的檢視執行計畫就可以從中找出端倪  下了一段指令，使用檢視執行計畫來觀察，它告訴我在 hj_agent 的 userName 的欄位要下索引，不然大部分的時間與資源都會消耗">
 <meta name="keywords" content="SQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="15 個優化 SQL">
+<meta property="og:title" content="15 個優化 SQL 的方法">
 <meta property="og:url" content="http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/index.html">
 <meta property="og:site_name" content="程式設計筆記">
-<meta property="og:description" content="前言 索引 (Indexes)對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。可以使用 SQL Server Management Studio 的語法分析  運算子 (Symbol Operator)在查詢資料時，會使用許多運算子 &amp;gt;, &amp;lt;, =, != 在查詢內，可以透過已經建立的索引來加快查詢，例如">
-<meta property="og:updated_time" content="2017-05-11T14:43:58.000Z">
+<meta property="og:description" content="方法 索引 (Indexes)對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。可以使用 SQL Server Management Studio 的檢視執行計畫就可以從中找出端倪  下了一段指令，使用檢視執行計畫來觀察，它告訴我在 hj_agent 的 userName 的欄位要下索引，不然大部分的時間與資源都會消耗">
+<meta property="og:image" content="http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/SQL-view-before.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/SQL-optimization-before.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/SQL-view-after.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/SQL-optimization-after.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/sql-where-before.png">
+<meta property="og:image" content="http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/sql-where-after.png">
+<meta property="og:updated_time" content="2017-05-12T16:02:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="15 個優化 SQL">
-<meta name="twitter:description" content="前言 索引 (Indexes)對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。可以使用 SQL Server Management Studio 的語法分析  運算子 (Symbol Operator)在查詢資料時，會使用許多運算子 &amp;gt;, &amp;lt;, =, != 在查詢內，可以透過已經建立的索引來加快查詢，例如">
+<meta name="twitter:title" content="15 個優化 SQL 的方法">
+<meta name="twitter:description" content="方法 索引 (Indexes)對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。可以使用 SQL Server Management Studio 的檢視執行計畫就可以從中找出端倪  下了一段指令，使用檢視執行計畫來觀察，它告訴我在 hj_agent 的 userName 的欄位要下索引，不然大部分的時間與資源都會消耗">
+<meta name="twitter:image" content="http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/SQL-view-before.png">
 
 
 
@@ -131,7 +138,7 @@
 
 
 
-  <title> 15 個優化 SQL | 程式設計筆記 </title>
+  <title> 15 個優化 SQL 的方法 | 程式設計筆記 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
@@ -281,7 +288,7 @@
             
             
               
-                15 個優化 SQL
+                15 個優化 SQL 的方法
               
             
           </h1>
@@ -365,22 +372,38 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ol>
-<li><p>索引 (Indexes)<br>對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。<br>可以使用 SQL Server Management Studio 的語法分析</p>
+        <h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><ol>
+<li><p>索引 (Indexes)<br>對欄位加上索引是最常見的優化方式，但是前提是必須要了解它如何運作，以便充分運用，不然有時候有設等於沒有設定一樣，甚至可以拖垮效能。<br>可以使用 SQL Server Management Studio 的檢視執行計畫就可以從中找出端倪</p>
+<img src="/posts/15-ways-optimize-sql-queries/SQL-view-before.png" width="500">
+<p>下了一段指令，使用檢視執行計畫來觀察，它告訴我在 hj_agent 的 userName 的欄位要下索引，不然大部分的時間與資源都會消耗在這裡</p>
+<img src="/posts/15-ways-optimize-sql-queries/SQL-optimization-before.png" width="500">
+<p>果不其然，執行了 4:42 秒，真是有夠久的，之後我將 hj_agent 的 userName 的欄位下索引，再使用檢視執行計畫來觀察</p>
+<img src="/posts/15-ways-optimize-sql-queries/SQL-view-after.png" width="500">
+<p>改善後執行</p>
+<img src="/posts/15-ways-optimize-sql-queries/SQL-optimization-after.png" width="500">
+<p>只用了 18 秒</p>
+<a id="more"></a>
 </li>
 <li><p>運算子 (Symbol Operator)<br>在查詢資料時，會使用許多運算子 &gt;, &lt;, =, != 在查詢內，可以透過已經建立的索引來加快查詢，例如：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> HJ_Cash <span class="keyword">WHERE</span> Cash &gt; <span class="number">100</span></div></pre></td></tr></table></figure>
+<p>執行結果如下</p>
+<img src="/posts/15-ways-optimize-sql-queries/sql-where-before.png" width="500">
+<p>花了 25 秒，但使用另一種方式</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> HJ_Cash <span class="keyword">WHERE</span> Cash &gt;= <span class="number">101</span></div></pre></td></tr></table></figure>
+<img src="/posts/15-ways-optimize-sql-queries/sql-where-after.png" width="500">
+<p>只花了 8 秒</p>
 </li>
-<li><p>模糊搜尋 (Wildcard)<br>在查詢資料時，通常會使用 % 來模糊搜尋，但是這樣會拖慢查詢速度，一旦</p>
+<li><p>模糊搜尋 (Wildcard)<br>在查詢資料時，通常會使用 % 來模糊搜尋，但是這樣會拖慢查詢速度，特別是資料表大的時候。<br>但在我們做查詢的時候也未必要前後都使用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#Full wildcard</div><div class="line">SELECT * FROM TABLE WHERE COLUMN LIKE ‘%hello%’;</div><div class="line">#Postfix wildcard</div><div class="line">SELECT * FROM TABLE WHERE COLUMN LIKE ‘hello%’;</div><div class="line">#Prefix wildcard</div><div class="line">SELECT * FROM TABLE WHERE COLUMN LIKE ‘%hello’;</div></pre></td></tr></table></figure>
+<p>此欄位必須要做索引才有用</p>
 </li>
 <li><p>NOT 運算子<br>盡量避免使用 NOT 在 SQL 查詢內，用非 NOT 的方式達到相同目的，效率會好很多。例如多使用 LIKE, IN, EXIST 或 =，而不要去使用 NOT LIKE, NOT IN, NOT EXIST or !=。使用 NOT 會導致每一筆都要再去數據庫確定不屬於或不存在此資料表。當資料量一大，效能的差距就會出來。</p>
 </li>
 <li><p>COUNT VS EXIST<br>使用 COUNT 來查詢有多少筆資料的存在</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(*) <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> <span class="keyword">column</span> &gt; <span class="number">10</span></div></pre></td></tr></table></figure>
-<p>但這是一個效率非常差的查詢，因為它會去搜尋所有存在資料表上的紀錄，如果只需要判斷找尋存在的功能，則可以用 EXIST 即可，因為它一旦找到，就會停止尋找。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">IF (<span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(*) <span class="keyword">FROM</span> HJ_user <span class="keyword">WHERE</span> createTime &gt; <span class="string">'2017-03-21'</span> <span class="keyword">AND</span> createTime &lt; <span class="string">'2017-03-25'</span> ) &gt; <span class="number">0</span></div><div class="line"> Print <span class="string">'YES'</span></div></pre></td></tr></table></figure>
+<p>但這是一個效率非常差的查詢，因為它會去搜尋所有存在資料表上的紀錄，如果只需要判斷找尋存在的功能，則可以用 EXIST 即可，因為它一旦找到，就會停止尋找。<br>如同以下指令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">IF EXISTS(<span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> HJ_user <span class="keyword">WHERE</span> createTime &gt; <span class="string">'2017-03-21'</span> <span class="keyword">AND</span> createTime &lt; <span class="string">'2017-03-25'</span> )</div><div class="line"> Print <span class="string">'YES'</span></div></pre></td></tr></table></figure>
 </li>
-</ol>
-<ol>
 <li><p>Wildcard VS Substr<br>如果欄位有做索引的話，那麼最好使用模糊搜尋，而不是使用 substr</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> <span class="keyword">substr</span> ( <span class="keyword">column</span>, <span class="number">1</span>, <span class="number">1</span> ) = <span class="string">'value'</span></div></pre></td></tr></table></figure>
 <p>上面的查詢會去 substr 每一筆資料就為了找 ‘value’ 這個字串，而</p>
@@ -404,7 +427,9 @@
 <li><p>使用預設值<br>如果使用 MySQL 時，盡量使用 Default 值，Insert values 只有跟 Default 不一樣時才用，在 MySQL 裡，可以減少一次解析時間，並加快寫入速度。</p>
 </li>
 <li><p>In 子查詢<br>通常會使用 in 來做子查詢</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> <span class="keyword">Column</span> <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="keyword">Column</span> <span class="keyword">FROM</span> <span class="keyword">Table</span>)</div><div class="line"><span class="string">``</span><span class="string">` </span></div><div class="line">這是一個很耗資源的查詢，SQL 會先處理內部查詢，再處理外部</div><div class="line">`<span class="string">``</span> <span class="keyword">sql</span> </div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span>, (<span class="keyword">SELECT</span> <span class="keyword">Column</span> <span class="keyword">FROM</span> <span class="keyword">Table</span>) <span class="keyword">as</span> dummytable</div><div class="line"><span class="keyword">WHERE</span> dummytable.Column = Table.Column</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span> <span class="keyword">WHERE</span> <span class="keyword">Column</span> <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="keyword">Column</span> <span class="keyword">FROM</span> <span class="keyword">Table</span>)</div></pre></td></tr></table></figure>
+<p>這是一個很耗資源的查詢，SQL 會先處理內部查詢，再處理外部</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">Table</span>, (<span class="keyword">SELECT</span> <span class="keyword">Column</span> <span class="keyword">FROM</span> <span class="keyword">Table</span>) <span class="keyword">as</span> dummytable</div><div class="line"><span class="keyword">WHERE</span> dummytable.Column = Table.Column</div></pre></td></tr></table></figure>
 <p>使用自訂表會比 in 來得好用，另外，用 EXIST 也不錯</p>
 </li>
 <li><p>Utilize Union instead of OR<br>在 MySQL 裡面，用了 OR 會讓查詢的速度優勢不見，就算欄位做索引也不會有太大效用</p>
@@ -544,7 +569,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-count">55</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -601,7 +626,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#實作"><span class="nav-number">2.</span> <span class="nav-text">實作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">3.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#方法"><span class="nav-number">1.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#實作"><span class="nav-number">2.</span> <span class="nav-text">實作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">3.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
             
 
           </div>
@@ -747,7 +772,7 @@
         var disqus_config = function () {
           this.page.url = 'http://boxmagic.github.io/posts/15-ways-optimize-sql-queries/';
           this.page.identifier = 'posts/15-ways-optimize-sql-queries/';
-          this.page.title = '15 個優化 SQL';
+          this.page.title = '15 個優化 SQL 的方法';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://boxmagic.disqus.com/embed.js';
