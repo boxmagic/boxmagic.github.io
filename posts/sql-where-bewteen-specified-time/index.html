@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="前言今天碰到用戶要求某一項活動需要撈取前一天的某個時段做排名，並依照排名下去派發獎勵，之前有提到 SQL 取得今日資料，此篇文章就是要來使用 SQL 來找出某一段時間的資料 實作SQL Server 可以使用 DATEPART 來做更細微的篩選，例如：1DATEPART(HOUR,Time_Stamp) BETWEEN 14 AND 16 當然可以參考更多用法，請到 [DATEPART (Tran">
+<meta name="description" content="前言今天碰到用戶要求某一項活動需要撈取前一天的某個時段做排名，並依照排名下去派發獎勵，之前有提到 SQL 取得今日資料，此篇文章就是要來使用 SQL 來找出某一段時間的資料 實作SQL Server 可以使用 DATEPART 來做更細微的篩選，例如：1DATEPART(HOUR,Time_Stamp) BETWEEN 14 AND 16 當然可以參考更多用法，請到 [DATEPART Trans">
 <meta name="keywords" content="SQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL 取得當天某個時段的資料">
 <meta property="og:url" content="http://boxmagic.github.io/posts/sql-where-bewteen-specified-time/index.html">
 <meta property="og:site_name" content="程式設計筆記">
-<meta property="og:description" content="前言今天碰到用戶要求某一項活動需要撈取前一天的某個時段做排名，並依照排名下去派發獎勵，之前有提到 SQL 取得今日資料，此篇文章就是要來使用 SQL 來找出某一段時間的資料 實作SQL Server 可以使用 DATEPART 來做更細微的篩選，例如：1DATEPART(HOUR,Time_Stamp) BETWEEN 14 AND 16 當然可以參考更多用法，請到 [DATEPART (Tran">
-<meta property="og:updated_time" content="2017-06-16T14:42:45.000Z">
+<meta property="og:description" content="前言今天碰到用戶要求某一項活動需要撈取前一天的某個時段做排名，並依照排名下去派發獎勵，之前有提到 SQL 取得今日資料，此篇文章就是要來使用 SQL 來找出某一段時間的資料 實作SQL Server 可以使用 DATEPART 來做更細微的篩選，例如：1DATEPART(HOUR,Time_Stamp) BETWEEN 14 AND 16 當然可以參考更多用法，請到 [DATEPART Trans">
+<meta property="og:updated_time" content="2017-06-16T14:46:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL 取得當天某個時段的資料">
-<meta name="twitter:description" content="前言今天碰到用戶要求某一項活動需要撈取前一天的某個時段做排名，並依照排名下去派發獎勵，之前有提到 SQL 取得今日資料，此篇文章就是要來使用 SQL 來找出某一段時間的資料 實作SQL Server 可以使用 DATEPART 來做更細微的篩選，例如：1DATEPART(HOUR,Time_Stamp) BETWEEN 14 AND 16 當然可以參考更多用法，請到 [DATEPART (Tran">
+<meta name="twitter:description" content="前言今天碰到用戶要求某一項活動需要撈取前一天的某個時段做排名，並依照排名下去派發獎勵，之前有提到 SQL 取得今日資料，此篇文章就是要來使用 SQL 來找出某一段時間的資料 實作SQL Server 可以使用 DATEPART 來做更細微的篩選，例如：1DATEPART(HOUR,Time_Stamp) BETWEEN 14 AND 16 當然可以參考更多用法，請到 [DATEPART Trans">
 
 
 
@@ -367,7 +367,7 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天碰到用戶要求某一項活動需要撈取前一天的某個時段做排名，並依照排名下去派發獎勵，之前有提到 <a href="/posts/sql-where-today/">SQL 取得今日資料</a>，此篇文章就是要來使用 SQL 來找出某一段時間的資料</p>
 <h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>SQL Server 可以使用 <code>DATEPART</code> 來做更細微的篩選，例如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DATEPART(HOUR,Time_Stamp) BETWEEN 14 AND 16</div></pre></td></tr></table></figure></p>
-<p>當然可以參考更多用法，請到 [DATEPART (Transact-SQL)] (<a href="https://msdn.microsoft.com/zh-tw/library/ms174420(v=sql.120).aspx" target="_blank" rel="external">https://msdn.microsoft.com/zh-tw/library/ms174420(v=sql.120).aspx</a>)</p>
+<p>當然可以參考更多用法，請到 [DATEPART Transact-SQL] (<a href="https://msdn.microsoft.com/zh-tw/library/ms174420(v=sql.120).aspx" target="_blank" rel="external">https://msdn.microsoft.com/zh-tw/library/ms174420(v=sql.120).aspx</a>)</p>
 <h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://ryan-tw.blogspot.com/2014/05/sql.html" target="_blank" rel="external">[SQL]搜尋一個日期區間中的一個時段(時間)的指令</a></p>
 
       
