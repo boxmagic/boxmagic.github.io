@@ -257,6 +257,316 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10405/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-10405/" itemprop="url">
+                  ACM 10405 Longest Common Subsequence，最長共同子字串
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-07-11T14:20:00+08:00">
+                2010-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-10405/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-10405/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>建議大家可以上網去找「最長共同子字串」的演算法，此演算法是由「最長連續共同子字串」推演而來。「最長共同子字串」的方法就是依序比對字串，將最佳比對結果逐一往陣列右下方推，推到最後，答案就出來了。<br>C 語言程式碼如下：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> LEN 1000</span></div><div class="line"></div><div class="line"><span class="keyword">char</span> seq1[LEN + <span class="number">1</span>], seq2[LEN + <span class="number">1</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">lcs_length</span>(<span class="params"><span class="keyword">int</span> s1Len, <span class="keyword">int</span> s2Len</span>) </span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> i, j;</div><div class="line">    <span class="keyword">int</span> table[s1Len + <span class="number">1</span>][s2Len + <span class="number">1</span>];</div><div class="line">    memset(table, <span class="number">0</span>, <span class="keyword">sizeof</span>(table));</div><div class="line"> </div><div class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt;= s1Len; ++i) &#123;</div><div class="line">        <span class="keyword">for</span>(j = <span class="number">1</span>; j &lt;= s2Len; ++j) &#123;</div><div class="line">            <span class="keyword">if</span>(seq1[i - <span class="number">1</span>] == seq2[j - <span class="number">1</span>])</div><div class="line">                table[i][j] = table[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span>;</div><div class="line">            <span class="function"><span class="keyword">else</span> <span class="title">if</span>(<span class="params">table[i - <span class="number">1</span>][j] &gt; table[i][j - <span class="number">1</span>]</span>)</span></div><div class="line">                table[i][j] = table[i - <span class="number">1</span>][j];</div><div class="line">            <span class="keyword">else</span></div><div class="line">                table[i][j] = table[i][j - <span class="number">1</span>];</div><div class="line">        &#125;</div><div class="line">   &#125;</div><div class="line">   <span class="keyword">return</span> table[s1Len][s2Len];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span>(<span class="params"></span>)</span></div><div class="line">&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">while</span> (gets(seq1))</div><div class="line">    &#123;</div><div class="line">        gets(seq2);  </div><div class="line">        <span class="keyword">int</span> s1Len = strlen(seq1), s2Len = strlen(seq2);</div><div class="line">        printf(<span class="string">"%d\n"</span>, lcs_length(s1Len, s2Len));</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10409/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-10409/" itemprop="url">
+                  ACM 10409 Die Game，骰子遊戲
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-07-11T13:52:00+08:00">
+                2010-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-10409/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-10409/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>首先宣告一結構，紀錄骰子上下東西南北所屬數字為何：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> Dice</div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> up, down, north, east, south, west;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">struct</span> Dice d;</div></pre></td></tr></table></figure></p>
+<p>主程式內，讀入翻動次數 n 次後，先初始化骰子數字各在哪些方位：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">d.up = <span class="number">1</span>, d.down = <span class="number">6</span>, d.north = <span class="number">2</span>,</div><div class="line">d.east = <span class="number">4</span>, d.south = <span class="number">5</span>, d.west = <span class="number">3</span>;</div></pre></td></tr></table></figure></p>
+<p>最後只要依照相對面的骰子總和為 7 以及空間概念，就可寫出來：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (n --)</div><div class="line">&#123;</div><div class="line">    scanf(<span class="string">"%s"</span>, str);  </div><div class="line">    <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'s'</span>) <span class="comment">/* 南 */</span></div><div class="line">        d.south = d.up, d.up = d.north, </div><div class="line">        d.down = <span class="number">7</span> - d.up, d.north = <span class="number">7</span> - d.south;</div><div class="line">    <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'n'</span>) <span class="comment">/* 北 */</span></div><div class="line">        d.down = d.north, d.north = d.up,</div><div class="line">        d.up = <span class="number">7</span> - d.down, d.south = <span class="number">7</span> - d.north;</div><div class="line">    <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'w'</span>)</div><div class="line">        d.down = d.west, d.west = d.up,</div><div class="line">        d.up = <span class="number">7</span> - d.down, d.east = <span class="number">7</span> - d.west;</div><div class="line">    <span class="keyword">if</span> (str[<span class="number">0</span>] == <span class="string">'e'</span>)</div><div class="line">        d.east = d.up, d.up = d.west,</div><div class="line">        d.down = <span class="number">7</span> - d.up, d.west = <span class="number">7</span> - d.east;</div><div class="line">&#125;</div><div class="line">printf(<span class="string">"%d\n"</span>, d.up);</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10452/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -681,6 +991,217 @@
             <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>給你圓的半徑 r 與內接 n 邊形的邊數量，要你求出 n 邊形面積多少。</p>
 <img src="/posts/acm-10432/p10432.jpg" width="400">
 <p>以上為 n = 8 的表示方式。<br>推導公式，要求橘色邊和綠色邊方能求出 n 邊形之一塊三角形面積，所以 θ 角要先求出，2 x PI 為一個圓周率，所以 θ = 2 x PI / n。<br>所以，取 θ 角的一半，橘色邊為 r x cos(PI / n)，<br>綠色邊為 2 x r x sin(PI / n)，<br>面積為 r x cos(PI / n) x 2 x r x sin(PI / n) / 2，<br>約分後為 r x r x cos(PI / n) x sin(PI / n) = r x r x sin(2 x PI / n) / 2。<br>(依照公式 sin2θ = 2sinθcosθ)<br>而有 n 塊三角形所以 n 邊形總面積為 n x r x r x sin(2 x PI / n) / 2。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10491/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/acm-10491/" itemprop="url">
+                  ACM 10491 Cows and Cars，牛與車
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-07-04T18:48:00+08:00">
+                2010-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ACM/" itemprop="url" rel="index">
+                    <span itemprop="name">ACM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/acm-10491/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/acm-10491/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>此題為機率題，找出其中公式就可解此題。舉幾個例子：</p>
+<table>
+<thead>
+<tr>
+<th>牛數量</th>
+<th>車數量</th>
+<th>開門數</th>
+<th>門總數</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>以上資料來看，<br>先選牛的機率 2 / 3，換選車機率 1 / 1 (因為會開一個門是牛的門，規定又說一定要換門)，所以機率 2 / 3 <em> 1 = 2 / 3。<br>先選車機率 1 / 3，換選車機率 0 / 1 (一開始選車，再開一個是牛的門，規定一定要換門)，所以機率 1 / 3 </em> 0 = 0。<br>一定要換門的機率為 2 / 3 + 0 = 2 / 3。</p>
+<table>
+<thead>
+<tr>
+<th>牛數量</th>
+<th>車數量</th>
+<th>開門數</th>
+<th>門總數</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>3</td>
+<td>2</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<p>先選牛的機率 5 / 8，換選車機率 3 / 5，所以機率 5 / 8 <em> 3 / 5 = 15 / 40。<br>先選車機率 3 / 8，換選車機率 2 / 5 ，所以機率 3 / 8 </em> 2 / 5 = 6 / 40。<br>一定要換門的機率為 15 / 40 + 6 / 40 = 21 / 40。<br>最後推導公式：</p>
+<table>
+<thead>
+<tr>
+<th>牛數量</th>
+<th>車數量</th>
+<th>開門數</th>
+<th>門總數</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NCOWS</td>
+<td>NCARS</td>
+<td>NSHOW</td>
+<td>DOORS (= NCOWS + NCARS)</td>
+</tr>
+</tbody>
+</table>
+<p>先選牛的機率 NCOWS / DOORS，換選車機率 NCARS / (DOORS - NSHOW - 1)，所以機率 NCOWS <em> NCARS / (DOORS </em> (DOORS - NSHOW - 1))。<br>先選車機率 NCARS / DOORS，換選車機率 (NCARS - 1) / (DOORS - NSHOW - 1)，所以機率 NCARS <em> (NCARS - 1) / (DOORS </em> (DOORS - NSHOW - 1))。<br>一定要換門的機率為 (NCOWS + NCARS - 1) <em> NCARS / (DOORS </em> (DOORS - NSHOW - 1))。</p>
 
           
         
@@ -1343,479 +1864,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-11069/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-11069/" itemprop="url">
-                  ACM 11069 A Graph Problem，計算子集合
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-31T01:23:00+08:00">
-                2010-01-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-11069/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-11069/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 11069 此題需要用到費氏(Fibonacci)列數的概念。</p>
-<p>本來我想用暴力破解法，當我實際算出他前幾次的值後，才發現這關係。<br>F<sub>1</sub> = 1，F<sub>2</sub> = 2，F<sub>3</sub> = 2；而 n &gt; 3後，則為F<sub>n-2</sub> + F<sub>n-3</sub>，例如：F<sub>4</sub> = F<sub>2</sub> + F<sub>1</sub> = 3。</p>
-<p>接下來，就交給你們自己去完成了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-484/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-484/" itemprop="url">
-                  ACM 484 The Department of Redundancy Department，數值出現次數
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-29T18:30:00+08:00">
-                2010-01-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-484/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-484/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>Problem 484 此題是輸入一串以空白相間的數值，要你列出每個數值重複出現的次數。</p>
-<p>此題我用一個二維陣列就解決了。只需判斷它數值是否有出現即可，有出現則累加；沒出現則加入。</p>
-<p>主程式區段程式碼如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n) &lt; <span class="number">1</span>) <span class="keyword">break</span>;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; index; i ++ )    </div><div class="line">    <span class="keyword">if</span> (Num[i][<span class="number">0</span>] == n) <span class="keyword">break</span>;</div><div class="line"><span class="keyword">if</span> (i != index) Num[i][<span class="number">1</span>] ++;</div><div class="line"><span class="keyword">else</span> &#123;    </div><div class="line">    Num[index][<span class="number">0</span>] = n, Num[index][<span class="number">1</span>] = <span class="number">1</span>;</div><div class="line">    index ++;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/acm-10209/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/acm-10209/" itemprop="url">
-                  ACM 10209 Is This Integration ?，計算面積
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2010-01-28T16:13:00+08:00">
-                2010-01-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index">
-                    <span itemprop="name">ACM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/acm-10209/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/acm-10209/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h1><p>ACM 10209 為下圖計算三區塊的面積，輸入正方形的寬度，輸出三個數值，第一個數值為畫斜線的面積、第二個數值為佈滿點面積、第三個數值為畫格子的面積。<br><img src="/posts/acm-10209/p10209.jpg" width="300"></p>
-<p>(以上圖片已經經過修改，如要看真實圖片請至下面點擊題目連結即可。)</p>
-<p>此題目必須使用一些三角函數的概念。</p>
-<p>首先，以A為圓心，線AD為半徑畫60度圓，定義此點為點E，△ADE構成一個正三角形。接著定義線DE中點為點F，再以A為圓心，線AD為半徑畫30度圓，定義此點為點G。<br>要先算出△AED面積，已知線AD為 len，D角為60度，線DE為 len/2，利用三角函數概念，得知線AF為 len<em>sin60，則此三角形面積為 len</em>len*sin60/2 (以下稱此三角形為 t)。</p>
-<p>我們知道A角為60度，則扇形ADE為圓的六分之一，面積為 len<em>len</em>PI/6 ，所以弓形DFG面積為 len<em>len</em>PI/6 - t (以下稱此弓形為 b)。扇形ADG為圓的十二分之一，面積為 len<em>len</em>PI/12，因弓形DFG = 弓形AHG為相同面積，則不規則形ADGH面積為 len<em>len</em>PI/12 - b (以下稱此不規則形為 d)。</p>
-<p>仔細觀察圖形，畫斜線部分的周圍，圍起四個面積與不規則形ADGH相同的圖形。<br>則畫斜線的面積為 len<em>len - 4</em>d。(以下稱為 areaA)</p>
-<p>再仔細觀察圖形，若正方形扣除四分之一圓ADB會變成怎麼樣?(思考一下)<br>則畫格子的圖形面積為 ( len<em>len - len</em>len<em>PI/4 - d ) </em> 4。(以下稱為 areaC)</p>
-<p>最後，佈滿點圖形的面積為 ( areaC - d )*4</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1865,7 +1913,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-count">58</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -1876,7 +1924,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">分類</span>
               </a>
             </div>
