@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C#,Unity,Unity.MVC,IoC,DI," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言為何會提到 IoC (Inversion of Control，控制反轉) 和 DI (Dependency Injection，依賴注入)？因為最近接觸公司的專案，有個 WebService 專案使用依賴注入與控制反轉，而這專案使用 Unity 套件來實作 IoC 和 DI，基於好奇學習心態下，對 IoC 和 DI 做了些許的研究。 控制反轉 ( IoC )IoC ( Inversion o">
+<meta name="keywords" content="C#,Unity,Unity.MVC,IoC,DI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解 IoC ( 控制反轉 ) 與 DI ( 依賴注入 )">
+<meta property="og:url" content="http://boxmagic.github.io/posts/IoC-And-Di-using-c-sharp/index.html">
+<meta property="og:site_name" content="程式設計筆記">
+<meta property="og:description" content="前言為何會提到 IoC (Inversion of Control，控制反轉) 和 DI (Dependency Injection，依賴注入)？因為最近接觸公司的專案，有個 WebService 專案使用依賴注入與控制反轉，而這專案使用 Unity 套件來實作 IoC 和 DI，基於好奇學習心態下，對 IoC 和 DI 做了些許的研究。 控制反轉 ( IoC )IoC ( Inversion o">
+<meta property="og:updated_time" content="2017-07-25T23:13:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解 IoC ( 控制反轉 ) 與 DI ( 依賴注入 )">
+<meta name="twitter:description" content="前言為何會提到 IoC (Inversion of Control，控制反轉) 和 DI (Dependency Injection，依賴注入)？因為最近接觸公司的專案，有個 WebService 專案使用依賴注入與控制反轉，而這專案使用 Unity 套件來實作 IoC 和 DI，基於好奇學習心態下，對 IoC 和 DI 做了些許的研究。 控制反轉 ( IoC )IoC ( Inversion o">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boxmagic.github.io/posts/IoC-And-Di-using-c-sharp/"/>
+
+
+
+
+
+  <title> 理解 IoC ( 控制反轉 ) 與 DI ( 依賴注入 ) | 程式設計筆記 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程式設計筆記</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/IoC-And-Di-using-c-sharp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                理解 IoC ( 控制反轉 ) 與 DI ( 依賴注入 )
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-07-23T20:24:34+08:00">
+                2017-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C#</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/IoC-And-Di-using-c-sharp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/IoC-And-Di-using-c-sharp/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>為何會提到 IoC (Inversion of Control，控制反轉) 和 DI (Dependency Injection，依賴注入)？因為最近接觸公司的專案，有個 WebService 專案使用依賴注入與控制反轉，而這專案使用 Unity 套件來實作 IoC 和 DI，基於好奇學習心態下，對 IoC 和 DI 做了些許的研究。</p>
+<h1 id="控制反轉-IoC"><a href="#控制反轉-IoC" class="headerlink" title="控制反轉 ( IoC )"></a>控制反轉 ( IoC )</h1><p>IoC ( Inversion of Control )，是物件導向中的一種設計原則，目的是為了降低物件之間的耦合度，最初的思考是：借助於「第三方」實現具有依賴關係的物件之間的耦合。<br>一般來說，原是上層依賴下層，但是下層若有任何修改，連帶著上層所有類別都要修改。所以上層中使用下層的對象，下層修改則不會影響上層。它與工廠模式還挺類似的。</p>
+<p>舉個例子：當我們需要在專案中使用到<code>狗</code>的類別時，通常我們會不假思索的將<code>狗</code>的類別建立出來。而<code>狗</code>會有「吃飯」、「睡覺」等行為。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Dog</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Type &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; </div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Dog</span>(<span class="params"><span class="keyword">string</span> name</span>) </span>&#123;</div><div class="line">        Type = <span class="string">@"狗"</span>;</div><div class="line">        Name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Eat</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">@"&#123;0&#125; 開心的吃狗糧"</span>, Name));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Sleep</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">@"&#123;0&#125; 睡覺了"</span>, Name));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>但如果今天又需要使用<code>貓</code>的類別時，由於<code>貓</code>的行為也有「吃飯」、「睡覺」等行為，又需要建立相同於<code>狗</code>的類別。<br>而在主線程式中要使用<code>狗</code>類別，則宣告：<br><code>Dog dog = new Dog();</code><br>而要使用<code>狗</code>的方法，則用：<br><code>dog.Eat();</code><br>在只有一種寵物型態的狀況下，是非常好的解決方式，但通常一個專案中不可能只有一種型態那麼簡單，如果狀況還有相同類型的物件存在，為了避免重複程式碼存在，所以必須要做抽離。<br>所以我們就使用 interface 來實現抽離，就依照物件共用的特性來宣告，如同以下類別：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IAnimal</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Eat</span>(<span class="params"></span>)</span>;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Sleep</span>(<span class="params"></span>)</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而我們可以使用<code>貓</code>和<code>狗</code>的類別去繼承 IAnimal，類似於以下程式碼：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">   <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Cat</span> : <span class="title">IAnimal</span></div><div class="line">   &#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">string</span> Type &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Cat</span>(<span class="params"><span class="keyword">string</span> name</span>)</span></div><div class="line">	&#123;</div><div class="line">		Type = <span class="string">@"貓"</span>;</div><div class="line">		Name = name;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Eat</span>(<span class="params"></span>)</span></div><div class="line">	&#123;</div><div class="line">		Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">@"&#123;0&#125; 開心的吃貓糧"</span>, Name));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Sleep</span>(<span class="params"></span>)</span></div><div class="line">	&#123;</div><div class="line">		Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">@"&#123;0&#125; 睡覺了"</span>, Name));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// ... 貓的其他特性</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接著主程式之中，也只需要替換宣告物件為 IAnimal，如同以下程式碼：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">IAnimal animal = <span class="keyword">new</span> Dog(<span class="string">"Mark"</span>);</div><div class="line">animal.Eat();</div></pre></td></tr></table></figure></p>
+<p>當物件要換成是<code>貓</code>時，也只需要換成宣告<code>Cat</code>物件，因為 Interface 必須要實作，所以在使用上一定會有該方法可以呼叫，如此一來，規範了基本物件所必須要實作的部分，更降低了耦合度。</p>
+<h1 id="依賴注入-DI"><a href="#依賴注入-DI" class="headerlink" title="依賴注入 ( DI )"></a>依賴注入 ( DI )</h1><p>為 IoC 的實現方法，根據服務環境透過 IoC 容器將實例化的物件注入並運行，也就是說，把底層類別作為參數傳入上層類，實現上層對下層類的控制。<br>而 DI 中，分成三種注入方式，「建構式注入」、「屬性注入」、「參數注入」，實際做法可以參考 <a href="http://blog.developer.idv.tw/2014/05/ioc-di.html" target="_blank" rel="external">IOC 控制反轉 &amp; DI 依賴注入</a> 此篇文章。</p>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://www.bijishequ.com/detail/418011?p=77" target="_blank" rel="external">如何理解Spring IOC和DI</a><br><a href="https://dotblogs.com.tw/joysdw12/archive/2012/11/26/85081.aspx" target="_blank" rel="external">實作工廠模式、 IoC (Inversion of Control) 與 DI (Depedency Injection)</a><br><a href="http://blog.developer.idv.tw/2014/05/ioc-di.html" target="_blank" rel="external">IOC 控制反轉 &amp; DI 依賴注入</a><br><a href="http://ithelp.ithome.com.tw/articles/10156571" target="_blank" rel="external">IoC基本概念介紹</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C#</a>
+          
+            <a href="/tags/Unity/" rel="tag"># Unity</a>
+          
+            <a href="/tags/Unity-MVC/" rel="tag"># Unity.MVC</a>
+          
+            <a href="/tags/IoC/" rel="tag"># IoC</a>
+          
+            <a href="/tags/DI/" rel="tag"># DI</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/sql-where-bewteen-specified-time/" rel="prev" title="SQL 取得當天某個時段的資料">
+                SQL 取得當天某個時段的資料 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="David" />
+          <p class="site-author-name" itemprop="name">David</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#控制反轉-IoC"><span class="nav-number">2.</span> <span class="nav-text">控制反轉 ( IoC )</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#依賴注入-DI"><span class="nav-number">3.</span> <span class="nav-text">依賴注入 ( DI )</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">4.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://boxmagic.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://boxmagic.github.io/posts/IoC-And-Di-using-c-sharp/';
+          this.page.identifier = 'posts/IoC-And-Di-using-c-sharp/';
+          this.page.title = '理解 IoC ( 控制反轉 ) 與 DI ( 依賴注入 )';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://boxmagic.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

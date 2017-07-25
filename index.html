@@ -257,6 +257,168 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/IoC-And-Di-using-c-sharp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程式設計筆記">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/posts/IoC-And-Di-using-c-sharp/" itemprop="url">
+                  理解 IoC ( 控制反轉 ) 與 DI ( 依賴注入 )
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-07-23T20:24:34+08:00">
+                2017-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C#</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/IoC-And-Di-using-c-sharp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/IoC-And-Di-using-c-sharp/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>為何會提到 IoC (Inversion of Control，控制反轉) 和 DI (Dependency Injection，依賴注入)？因為最近接觸公司的專案，有個 WebService 專案使用依賴注入與控制反轉，而這專案使用 Unity 套件來實作 IoC 和 DI，基於好奇學習心態下，對 IoC 和 DI 做了些許的研究。</p>
+<h1 id="控制反轉-IoC"><a href="#控制反轉-IoC" class="headerlink" title="控制反轉 ( IoC )"></a>控制反轉 ( IoC )</h1><p>IoC ( Inversion of Control )，是物件導向中的一種設計原則，目的是為了降低物件之間的耦合度，最初的思考是：借助於「第三方」實現具有依賴關係的物件之間的耦合。<br>一般來說，原是上層依賴下層，但是下層若有任何修改，連帶著上層所有類別都要修改。所以上層中使用下層的對象，下層修改則不會影響上層。它與工廠模式還挺類似的。</p>
+<p>舉個例子：當我們需要在專案中使用到<code>狗</code>的類別時，通常我們會不假思索的將<code>狗</code>的類別建立出來。而<code>狗</code>會有「吃飯」、「睡覺」等行為。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Dog</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Type &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; </div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Dog</span>(<span class="params"><span class="keyword">string</span> name</span>) </span>&#123;</div><div class="line">        Type = <span class="string">@"狗"</span>;</div><div class="line">        Name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Eat</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">@"&#123;0&#125; 開心的吃狗糧"</span>, Name));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Sleep</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">@"&#123;0&#125; 睡覺了"</span>, Name));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>但如果今天又需要使用<code>貓</code>的類別時，由於<code>貓</code>的行為也有「吃飯」、「睡覺」等行為，又需要建立相同於<code>狗</code>的類別。<br>而在主線程式中要使用<code>狗</code>類別，則宣告：<br><code>Dog dog = new Dog();</code><br>而要使用<code>狗</code>的方法，則用：<br><code>dog.Eat();</code><br>在只有一種寵物型態的狀況下，是非常好的解決方式，但通常一個專案中不可能只有一種型態那麼簡單，如果狀況還有相同類型的物件存在，為了避免重複程式碼存在，所以必須要做抽離。<br>所以我們就使用 interface 來實現抽離，就依照物件共用的特性來宣告，如同以下類別：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IAnimal</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Eat</span>(<span class="params"></span>)</span>;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Sleep</span>(<span class="params"></span>)</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而我們可以使用<code>貓</code>和<code>狗</code>的類別去繼承 IAnimal，類似於以下程式碼：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">   <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Cat</span> : <span class="title">IAnimal</span></div><div class="line">   &#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">string</span> Type &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Cat</span>(<span class="params"><span class="keyword">string</span> name</span>)</span></div><div class="line">	&#123;</div><div class="line">		Type = <span class="string">@"貓"</span>;</div><div class="line">		Name = name;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Eat</span>(<span class="params"></span>)</span></div><div class="line">	&#123;</div><div class="line">		Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">@"&#123;0&#125; 開心的吃貓糧"</span>, Name));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Sleep</span>(<span class="params"></span>)</span></div><div class="line">	&#123;</div><div class="line">		Console.WriteLine(<span class="keyword">string</span>.Format(<span class="string">@"&#123;0&#125; 睡覺了"</span>, Name));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// ... 貓的其他特性</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接著主程式之中，也只需要替換宣告物件為 IAnimal，如同以下程式碼：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">IAnimal animal = <span class="keyword">new</span> Dog(<span class="string">"Mark"</span>);</div><div class="line">animal.Eat();</div></pre></td></tr></table></figure></p>
+<p>當物件要換成是<code>貓</code>時，也只需要換成宣告<code>Cat</code>物件，因為 Interface 必須要實作，所以在使用上一定會有該方法可以呼叫，如此一來，規範了基本物件所必須要實作的部分，更降低了耦合度。</p>
+<h1 id="依賴注入-DI"><a href="#依賴注入-DI" class="headerlink" title="依賴注入 ( DI )"></a>依賴注入 ( DI )</h1><p>為 IoC 的實現方法，根據服務環境透過 IoC 容器將實例化的物件注入並運行，也就是說，把底層類別作為參數傳入上層類，實現上層對下層類的控制。<br>而 DI 中，分成三種注入方式，「建構式注入」、「屬性注入」、「參數注入」，實際做法可以參考 <a href="http://blog.developer.idv.tw/2014/05/ioc-di.html" target="_blank" rel="external">IOC 控制反轉 &amp; DI 依賴注入</a> 此篇文章。</p>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://www.bijishequ.com/detail/418011?p=77" target="_blank" rel="external">如何理解Spring IOC和DI</a><br><a href="https://dotblogs.com.tw/joysdw12/archive/2012/11/26/85081.aspx" target="_blank" rel="external">實作工廠模式、 IoC (Inversion of Control) 與 DI (Depedency Injection)</a><br><a href="http://blog.developer.idv.tw/2014/05/ioc-di.html" target="_blank" rel="external">IOC 控制反轉 &amp; DI 依賴注入</a><br><a href="http://ithelp.ithome.com.tw/articles/10156571" target="_blank" rel="external">IoC基本概念介紹</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/sql-where-bewteen-specified-time/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1715,162 +1877,6 @@ table:nth-of-type(1) th:nth-of-type(4) {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://boxmagic.github.io/posts/how-to-reversal-bit-value-in-sql/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程式設計筆記">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/posts/how-to-reversal-bit-value-in-sql/" itemprop="url">
-                  如何在 SQL 更新時反轉 bit 欄位值
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-04-24T22:48:52+08:00">
-                2017-04-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/how-to-reversal-bit-value-in-sql/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="posts/how-to-reversal-bit-value-in-sql/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通常做一些活動、新聞、公告或者模組，都可能會需要有一個開啟或關閉的功能，在後台設定，而設定基本上不會再多個按鈕做保存動作，通常直接對資料庫做動作 ( 欄位為 bit )，而再撰寫 SQL 時，可能需要用 CASE WHEN ，寫起來特別彆扭，以下針對 bit 來切換開啟或關閉。</p>
-<h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>其實可以利用 Bitwise NOT 運算子就可以達到此效果<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">UPDATE</span> mytable <span class="keyword">SET</span>  <span class="keyword">enable</span> =~<span class="keyword">enable</span> </div><div class="line"><span class="keyword">WHERE</span> <span class="keyword">id</span>=@<span class="keyword">ID</span></div></pre></td></tr></table></figure></p>
-<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="http://stackoverflow.com/questions/3324770/is-there-an-elegant-way-to-invert-a-bit-value-in-an-sql-insert-statement" target="_blank" rel="external">Is there an elegant way to Invert a Bit value in an SQL insert Statement?</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1920,7 +1926,7 @@ table:nth-of-type(1) th:nth-of-type(4) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">59</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -1942,7 +1948,7 @@ table:nth-of-type(1) th:nth-of-type(4) {
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">標籤</span>
               </a>
             </div>

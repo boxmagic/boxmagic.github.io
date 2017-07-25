@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://boxmagic.github.io/posts/IoC-And-Di-using-c-sharp/</loc>
+    
+    <lastmod>2017-07-25T23:13:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://boxmagic.github.io/posts/sql-where-bewteen-specified-time/</loc>
     
     <lastmod>2017-06-16T14:46:13.000Z</lastmod>
