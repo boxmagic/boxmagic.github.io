@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="SQL," />
 
 
 
@@ -87,14 +87,17 @@
 
 
 
-<meta name="keywords">
+<meta name="description" content="實作其實很簡單，用亂數 RAND() 乘上兩段日期的時間差，加上開始時間，則會變成一個在範圍內的亂數時間。 12345DECLARE @SDate DATETIME, @EDate DATETIME;SET @SDate = &apos;2018/01/01&apos;;SET @EDate = &apos;2018/12/31&apos;;SELECT DATEADD(day, RAND(CHECKSUM(NEWID())) * DA">
+<meta name="keywords" content="SQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sql-random-date">
+<meta property="og:title" content="SQL 隨機取得亂數日期">
 <meta property="og:url" content="http://boxmagic.github.io/posts/sql-random-date/index.html">
 <meta property="og:site_name" content="程式設計筆記">
-<meta property="og:updated_time" content="2017-08-22T12:59:19.000Z">
+<meta property="og:description" content="實作其實很簡單，用亂數 RAND() 乘上兩段日期的時間差，加上開始時間，則會變成一個在範圍內的亂數時間。 12345DECLARE @SDate DATETIME, @EDate DATETIME;SET @SDate = &apos;2018/01/01&apos;;SET @EDate = &apos;2018/12/31&apos;;SELECT DATEADD(day, RAND(CHECKSUM(NEWID())) * DA">
+<meta property="og:updated_time" content="2017-08-22T14:10:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sql-random-date">
+<meta name="twitter:title" content="SQL 隨機取得亂數日期">
+<meta name="twitter:description" content="實作其實很簡單，用亂數 RAND() 乘上兩段日期的時間差，加上開始時間，則會變成一個在範圍內的亂數時間。 12345DECLARE @SDate DATETIME, @EDate DATETIME;SET @SDate = &apos;2018/01/01&apos;;SET @EDate = &apos;2018/12/31&apos;;SELECT DATEADD(day, RAND(CHECKSUM(NEWID())) * DA">
 
 
 
@@ -128,7 +131,7 @@
 
 
 
-  <title> sql-random-date | 程式設計筆記 </title>
+  <title> SQL 隨機取得亂數日期 | 程式設計筆記 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
@@ -278,7 +281,7 @@
             
             
               
-                sql-random-date
+                SQL 隨機取得亂數日期
               
             
           </h1>
@@ -303,6 +306,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -340,7 +365,10 @@
       
 
       
-        
+        <h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>其實很簡單，用亂數 RAND() 乘上兩段日期的時間差，加上開始時間，則會變成一個在範圍內的亂數時間。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DECLARE</span> @SDate DATETIME, @EDate DATETIME;</div><div class="line"><span class="keyword">SET</span> @SDate = <span class="string">'2018/01/01'</span>;</div><div class="line"><span class="keyword">SET</span> @EDate = <span class="string">'2018/12/31'</span>;</div><div class="line"></div><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEADD</span>(<span class="keyword">day</span>, <span class="keyword">RAND</span>(<span class="keyword">CHECKSUM</span>(NEWID())) * <span class="keyword">DATEDIFF</span>(<span class="keyword">DAY</span>, @SDate, @EDate), @SDate);</div></pre></td></tr></table></figure>
+<h1 id="參考網址"><a href="#參考網址" class="headerlink" title="參考網址"></a>參考網址</h1><p><a href="https://dotblogs.com.tw/rainmaker/2014/10/16/146968" target="_blank" rel="external">[SQL]產生亂數值 RAND NEWID</a></p>
+
       
     </div>
 
@@ -366,6 +394,12 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+        </div>
       
 
       
@@ -438,8 +472,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar/avatar.jpg"
@@ -501,6 +544,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#實作"><span class="nav-number">1.</span> <span class="nav-text">實作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考網址"><span class="nav-number">2.</span> <span class="nav-text">參考網址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -641,7 +700,7 @@
         var disqus_config = function () {
           this.page.url = 'http://boxmagic.github.io/posts/sql-random-date/';
           this.page.identifier = 'posts/sql-random-date/';
-          this.page.title = 'sql-random-date';
+          this.page.title = 'SQL 隨機取得亂數日期';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://boxmagic.disqus.com/embed.js';
